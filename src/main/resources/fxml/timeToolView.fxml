@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
+<?import com.seven.leanLife.controller.ClockPane?>
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seven.leanLife.controller.TimeToolViewController">
     <stylesheets>
         <URL value="@/css/timetoolview.css" />
@@ -26,6 +26,7 @@
                      </font>
                   </Label>
                   <TextField fx:id="currentTimeText" editable="false" promptText="显示当前时间戳" />
+                  <TextField fx:id="currentTimeStamp" promptText="当前时间戳" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="580.0" spacing="20.0">
@@ -35,19 +36,19 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="23.0" prefWidth="159.0" />
+                  <TextField fx:id="assignDateText" prefHeight="23.0" prefWidth="159.0" />
                   <Label text="时区">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
                   <ComboBox editable="true" prefHeight="23.0" prefWidth="100.0" promptText="选择时区" visibleRowCount="20" />
-                  <Button mnemonicParsing="false" text="转换">
+                  <Button mnemonicParsing="false" text="转换" onAction="#handleDateToTs">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <TextField />
+                  <TextField fx:id="dateToTsText"/>
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="46.0" prefHeight="34.0" prefWidth="580.0" spacing="20.0">
@@ -57,22 +58,39 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField />
+                  <TextField fx:id="assignTsText"/>
                   <Label text="时区">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
                   <ComboBox editable="true" prefHeight="23.0" prefWidth="100.0" promptText="选择时区" visibleRowCount="20" />
-                  <Button mnemonicParsing="false" text="转换">
+                  <Button mnemonicParsing="false" text="转换" onAction="#handleTsToDate">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <TextField />
+                  <TextField fx:id="tsToDateText"/>
                </children>
             </HBox>
-            <Circle fill="DODGERBLUE" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+            <HBox prefHeight="160.0" prefWidth="200.0">
+               <children>
+                  <ClockPane fx:id="BeiJingClock"/>
+                  <ClockPane fx:id="ShanghaiClock"/>
+                  <ClockPane fx:id="HongKongClock"/>
+               </children>
+            </HBox>
+            <HBox prefHeight="160.0" prefWidth="200.0">
+               <children>
+                  <ClockPane fx:id="LondonClock"/>
+                  <ClockPane fx:id="AmericanClock"/>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label id="descLabel" fx:id="descLabel" text="  时间戳是指格林威治时间1970年01月01日00时00分00秒(北京时间1970年01月01日08时00分00秒)起至现在的总秒数。" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

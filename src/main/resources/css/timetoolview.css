@@ -5,3 +5,18 @@
 .mainFxmlClass {
 
 }
+
+.label{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+.text-field{
+    -fx-border-color:#555555;
+}
+#descLabel {
+    -fx-font-size:14px;
+    -fx-text-alignment:left;
+    -fx-background-color: white;
+    -fx-border-color:#555555;
+    -fx-text-fill:#555555;
+}
