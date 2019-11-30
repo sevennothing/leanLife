@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seven.leanLife.controller.SystemViewController">
+    <stylesheets>
+        <URL value="@/css/systemview.css" />
+    </stylesheets>
+   <children>
+      <GridPane alignment="CENTER" layoutX="29.0" layoutY="164.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <AnchorPane id="mainMenuPane" prefHeight="543.0" prefWidth="100.0">
+               <children>
+                  <VBox layoutY="335.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label id="menuLabel" fx:id="noteManLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" onMouseClicked="#handleNoteManLabelClickedAction" prefHeight="30.0" prefWidth="100.0" styleClass="menuLabel" stylesheets="@/css/systemview.css" text="笔记管理" textAlignment="CENTER">
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Label>
+                        <Label id="menuLabel" fx:id="diaryManLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" onMouseClicked="#handleDiaryManLabelClickedAction" prefHeight="30.0" prefWidth="100.0" styleClass="menuLabel" stylesheets="@/css/systemview.css" text="日记管理" textAlignment="CENTER">
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Label>
+                        <Label id="menuLabel" fx:id="diaryManLabel1" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="40.0" maxWidth="-Infinity" onMouseClicked="#handleDiaryManLabelClickedAction" prefHeight="30.0" prefWidth="100.0" styleClass="menuLabel" stylesheets="@/css/systemview.css" text="时间管理" textAlignment="CENTER">
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Label>
+                        <Label id="menuLabel" fx:id="diaryManLabel11" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="70.0" maxWidth="-Infinity" onMouseClicked="#handleDiaryManLabelClickedAction" prefHeight="30.0" prefWidth="100.0" styleClass="menuLabel" stylesheets="@/css/systemview.css" text="文件管理" textAlignment="CENTER">
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Label>
+                        <Label id="menuLabel" fx:id="diaryManLabel111" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="100.0" maxWidth="-Infinity" onMouseClicked="#handleDiaryManLabelClickedAction" prefHeight="30.0" prefWidth="100.0" styleClass="menuLabel" stylesheets="@/css/systemview.css" text="项目管理" textAlignment="CENTER">
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Label>
+                        <Label id="menuLabel" fx:id="diaryManLabel1112" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="130.0" maxWidth="-Infinity" onMouseClicked="#handleDiaryManLabelClickedAction" prefHeight="30.0" prefWidth="100.0" styleClass="menuLabel" stylesheets="@/css/systemview.css" text="浏览器" textAlignment="CENTER">
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Label>
+                        <Label id="menuLabel" fx:id="toolsManLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="130.0" maxWidth="-Infinity" onMouseClicked="#handleToolsManLabelClickedAction" prefHeight="30.0" prefWidth="100.0" styleClass="menuLabel" stylesheets="@/css/systemview.css" text="便捷工具" textAlignment="CENTER">
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <TabPane fx:id="noteTabPane" layoutX="14.0" layoutY="23.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab closable="false" text="笔记概要" />
+                      <Tab text="视图1" />
+                    </tabs>
+                  </TabPane>
+                  <TabPane fx:id="diaryTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <tabs>
+                        <Tab closable="false" text="日记概要" />
+                        <Tab text="视图1" />
+                     </tabs>
+                  </TabPane>
+                  <TabPane fx:id="toolsTabPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <tabs>
+                        <Tab closable="false" text="工具面板">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <content>
+                                          <GridPane prefHeight="510.0" prefWidth="624.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="30.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="30.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <ImageView id="toolsCell" fx:id="colorToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleColorToolClickedAction" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                       <Image url="@/img/tools/colors.jpg" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
+                                                   </effect>
+                                                </ImageView>
+                                                <ImageView id="toolsCell" fx:id="clockToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleClockToolClickedAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                                   <image>
+                                                      <Image url="@/img/tools/clock.jpg" />
+                                                   </image>
+                                                   <effect>
+                                                      <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
+                                                   </effect>
+                                                </ImageView>
+                                             </children>
+                                          </GridPane>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab fx:id="clockTab" closable="true" text="时间工具">
+                            <content>
+                                <fx:include source="/fxml/timeToolView.fxml" />
+                            </content>
+                        </Tab>
+                     </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <buttons>
+                  <ButtonBar prefHeight="30.0" prefWidth="709.0">
+                    <buttons>
+                      <Button mnemonicParsing="false" text="存盘" textAlignment="CENTER">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </Button>
+                    </buttons>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </ButtonBar>
+               </buttons>
+            </ButtonBar>
+            <MenuButton mnemonicParsing="false" text="系统菜单" GridPane.rowIndex="1">
+              <items>
+                <MenuItem mnemonicParsing="false" text="退出登录" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </MenuButton>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

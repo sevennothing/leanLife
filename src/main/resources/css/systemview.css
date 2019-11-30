@@ -1,0 +1,47 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+    -fx-text-alignment: left;
+}
+
+.tab-pane {
+    -fx-background-color:transparent;
+    -fx-tab-min-width:30px;
+    -fx-tab-max-width:80px;
+    -fx-tab-min-height:30px;
+    -fx-tab-max-height:30px;
+
+}
+.tab {
+  -fx-font-family: Arial;
+  -fx-font-size: 12;
+  -fx-background-color:wheat ;
+  -fx-text-alignment: left;
+  -fx-translate-x: 0;
+  -fx-translate-y: 0;
+  -fx-translate-z: 0;
+  -fx-rotate:0;
+}
+
+.tab:selected {
+    -fx-background-color:cornsilk ;
+}
+
+.mainMenuPane {
+    -fx-border-color: peru;
+}
+.menuLabel{
+    -fx-border-width: 2px;
+    -fx-border-color:gray;
+    -fx-background-color:cornsilk;
+    -fx-font-family: Microsoft Yahei;
+    -fx-font-size: 15;
+}
+.menuLabel:hover{
+    -fx-background-color:peru ;
+}
+.toolsCell:hover{
+    -fx-background-color:peru ;
+}

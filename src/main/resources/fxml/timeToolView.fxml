@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seven.leanLife.controller.TimeToolViewController">
+    <stylesheets>
+        <URL value="@/css/timetoolview.css" />
+    </stylesheets>
+   <children>
+      <VBox layoutX="25.0" layoutY="27.0" prefHeight="358.0" prefWidth="555.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="580.0" spacing="20.0">
+               <children>
+                  <Label text="当前时间">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="currentTimeText" editable="false" promptText="显示当前时间戳" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="580.0" spacing="20.0">
+               <children>
+                  <Label text="指定时间">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="23.0" prefWidth="159.0" />
+                  <Label text="时区">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <ComboBox editable="true" prefHeight="23.0" prefWidth="100.0" promptText="选择时区" visibleRowCount="20" />
+                  <Button mnemonicParsing="false" text="转换">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <TextField />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="46.0" prefHeight="34.0" prefWidth="580.0" spacing="20.0">
+               <children>
+                  <Label text="指定时戳">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField />
+                  <Label text="时区">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <ComboBox editable="true" prefHeight="23.0" prefWidth="100.0" promptText="选择时区" visibleRowCount="20" />
+                  <Button mnemonicParsing="false" text="转换">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <TextField />
+               </children>
+            </HBox>
+            <Circle fill="DODGERBLUE" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
