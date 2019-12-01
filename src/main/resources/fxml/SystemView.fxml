@@ -143,7 +143,7 @@
                         </Tab>
                         <Tab fx:id="clockTab" closable="true" text="时间工具">
                             <content>
-                                <fx:include source="/fxml/timeToolView.fxml" />
+                                <fx:include fx:id="timeToolController" source="/fxml/timeToolView.fxml" />
                             </content>
                         </Tab>
                      </tabs>
@@ -169,6 +169,7 @@
             <MenuButton mnemonicParsing="false" text="系统菜单" GridPane.rowIndex="1">
               <items>
                   <MenuItem mnemonicParsing="false" text="全屏" />
+                  <MenuItem fx:id="monitorMenu" mnemonicParsing="false" onAction="#handleOpenMonitor" text="监控信息" />
                 <MenuItem mnemonicParsing="false" text="退出登录" />
                 <MenuItem mnemonicParsing="false" text="Action 2" />
               </items>

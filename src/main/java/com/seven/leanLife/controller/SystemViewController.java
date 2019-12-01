@@ -6,6 +6,7 @@
 package com.seven.leanLife.controller;
 
 import com.seven.leanLife.LeanLifeApp;
+import com.seven.leanLife.model.Monitor;
 import com.seven.leanLife.utils.moreUtils;
 import java.io.IOException;
 import java.net.URL;
@@ -44,6 +45,8 @@ import org.springframework.stereotype.Controller;
 public class SystemViewController {
     private LeanLifeApp mainApp;
     private Label currentMenuLabel;
+    private MonitorWin sysMw = null;
+    public static Monitor monitor = new Monitor();
     @FXML
     private Label nameLabel;
     
@@ -70,6 +73,8 @@ public class SystemViewController {
     private ImageView clockToolImg;
     @FXML
     private Tab clockTab;
+    @FXML
+    private TimeToolViewController timeToolController;
     
     @FXML
     private void initialize() {
@@ -78,6 +83,7 @@ public class SystemViewController {
         diaryTabPane.visibleProperty().set(false);
         toolsTabPane.visibleProperty().set(false);
         handleNoteManLabelClickedAction();
+
     }
     /**
      * 响应点击笔记管理
@@ -128,14 +134,16 @@ public class SystemViewController {
         cpyBt.setOnAction(new EventHandler<ActionEvent>() {	     
             @Override
             public void handle(ActionEvent event) {
-		//System.out.println("复制颜色值");	
+                monitor.setMsg("复制颜色值");
+                //System.out.println("复制颜色值");
                String  colorStr = colorPicker.getValue().toString();
                //System.out.println("颜色值:"+ colorStr  );
-               
+                //monitor.setMsg("颜色值:"+ colorStr  );
+                sysMw.publishMsg("颜色值:"+ colorStr  );
+
                Clipboard clipboard = Clipboard.getSystemClipboard();
                final ClipboardContent content = new ClipboardContent();
                content.putString(colorStr);
-
                clipboard.setContent(content);
 
             }
@@ -188,6 +196,18 @@ public class SystemViewController {
         mainApp.showLoginView();
         mainApp.setUser(null);
     }
+
+    @FXML
+    private void handleOpenMonitor(){
+        if(sysMw != null){
+            return;
+        }
+        sysMw = new MonitorWin();
+        sysMw.publishMsg("您打开了一个监控窗口");
+        sysMw.publishMsg("祝您使用愉快");
+        monitor.msgProperty().addListener(((observable, oldValue, newValue) -> sysMw.publishMsg(newValue)));
+        timeToolController.setMw(sysMw);
+    }
     /**
      *	得到主控制器的引用
      */
@@ -197,6 +217,14 @@ public class SystemViewController {
         //stage.setMaximized(true);
         //stage.setFullScreen(true);
         //nameLabel.setText(mainApp.getUser().getUserName());
+    }
+
+    /**
+     * 得到监控终端的引用
+     * @return 监控窗口节点
+     */
+    public MonitorWin getSysMw(){
+        return sysMw;
     }
     
 }

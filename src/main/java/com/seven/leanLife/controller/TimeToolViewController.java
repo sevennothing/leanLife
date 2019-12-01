@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.seven.leanLife.model.Monitor;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -57,6 +58,8 @@ public class TimeToolViewController {
     private ClockPane AmericanClock;
     @FXML
     private Label descLabel;
+
+    private MonitorWin sysMw;
 
     private final String BeiJingTZ = "Asia/Shanghai";
     private final String ShangHaiTZ = "Asia/Shanghai";
@@ -160,8 +163,9 @@ public class TimeToolViewController {
     private void handleDateToTs(){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String dateStr = assignDateText.getText();
-        if(dateStr == null){
-            System.out.println("请输入正确内容");
+        if(dateStr.length() < 1){
+            //System.out.println("请输入正确内容");
+            sysMw.publishMsg("请输入正确的时间:yyyy-MM-dd HH:mm:ss\r\n");
             return;
         }
         try {
@@ -169,7 +173,7 @@ public class TimeToolViewController {
             Long ts = date.getTime();
             dateToTsText.setText(ts.toString());
         } catch (ParseException e) {
-            e.printStackTrace();
+            sysMw.publishMsg(e.toString());
         }
     }
 
@@ -184,6 +188,11 @@ public class TimeToolViewController {
         Date date= new Date(ts);
 
         tsToDateText.setText(df.format(date));
+    }
+
+    public void setMw(MonitorWin mw){
+        this.sysMw = mw;
+        mw.publishMsg("Time Tool opened");
     }
 
 }
