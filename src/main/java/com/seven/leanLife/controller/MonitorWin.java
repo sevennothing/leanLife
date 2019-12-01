@@ -1,5 +1,5 @@
 package com.seven.leanLife.controller;
-import com.seven.leanLife.model.Monitor;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -15,6 +15,8 @@ public class MonitorWin extends Pane{
     private TextArea monInfoArea = null;
     private Button clrButton = null;
     private Button cpyButton = null;
+    private SimpleStringProperty isClosed;
+
     public MonitorWin(){
         Stage monStage = new Stage();
         StackPane pane = new StackPane();
@@ -53,11 +55,19 @@ public class MonitorWin extends Pane{
         AnchorPane.setRightAnchor(vbox,Double.valueOf(5));
         pane.getChildren().add(anchorPane);
 
-
         Scene scene = new Scene(pane, w, h);
         monStage.setScene(scene);
         monStage.setTitle("监控终端");
+        monStage.setAlwaysOnTop(true);
         monStage.show();
+
+        monStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                publishMsg("监控窗口被关闭");
+                isClosed.set("closed");
+            }
+        });
     }
 
 

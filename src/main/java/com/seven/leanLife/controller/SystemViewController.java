@@ -208,12 +208,18 @@ public class SystemViewController {
         monitor.msgProperty().addListener(((observable, oldValue, newValue) -> sysMw.publishMsg(newValue)));
         timeToolController.setMw(sysMw);
     }
+
+    @FXML
+    private void handleFullScreen(){
+        Stage stage = mainApp.getStage();
+        stage.setFullScreen(true);
+    }
     /**
      *	得到主控制器的引用
      */
     public void setMainApp(LeanLifeApp mainApp) {
         this.mainApp = mainApp;
-        Stage stage = mainApp.getStage();
+        //Stage stage = mainApp.getStage();
         //stage.setMaximized(true);
         //stage.setFullScreen(true);
         //nameLabel.setText(mainApp.getUser().getUserName());
