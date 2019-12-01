@@ -12,9 +12,14 @@ import java.util.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.springframework.stereotype.Controller;
@@ -30,6 +35,8 @@ public class TimeToolViewController {
     private TextField currentTimeText;
     @FXML
     private TextField currentTimeStamp;
+    @FXML
+    private Button copyCurrentTsButton;
     @FXML
     private TextField assignDateText;
     @FXML
@@ -57,6 +64,7 @@ public class TimeToolViewController {
     private final String LonDonTZ = "Europe/London";
     private final String AmericaTZ = "America/Dawson";
 
+
     /**
      * Initializes the controller class.
      */
@@ -74,7 +82,7 @@ public class TimeToolViewController {
             Date date = new Date();
             Long ts = date.getTime();
             currentTimeText.setText(df.format(date));
-            currentTimeStamp.setText(Long.toString(ts));
+            currentTimeStamp.setText(Long.toString(ts / 1000));
 
             /* 北京 时间*/
             Map<String,Integer> res = timestampConvertToDate(ts,BeiJingTZ );
@@ -140,9 +148,22 @@ public class TimeToolViewController {
     }
 
     @FXML
+    private void handleCopyCurrentTs(){
+        String  currentTs = currentTimeStamp.getText();
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(currentTs);
+        clipboard.setContent(content);
+    }
+
+    @FXML
     private void handleDateToTs(){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String dateStr = assignDateText.getText();
+        if(dateStr == null){
+            System.out.println("请输入正确内容");
+            return;
+        }
         try {
             Date date = df.parse(dateStr);
             Long ts = date.getTime();

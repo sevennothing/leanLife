@@ -27,6 +27,7 @@
                   </Label>
                   <TextField fx:id="currentTimeText" editable="false" promptText="显示当前时间戳" />
                   <TextField fx:id="currentTimeStamp" promptText="当前时间戳" />
+                  <Button fx:id="copyCurrentTsButton" onAction="#handleCopyCurrentTs" text="拷贝时戳"/>
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="580.0" spacing="20.0">
@@ -73,14 +74,14 @@
                   <TextField fx:id="tsToDateText"/>
                </children>
             </HBox>
-            <HBox prefHeight="160.0" prefWidth="200.0">
+            <HBox prefHeight="170.0" prefWidth="200.0">
                <children>
                   <ClockPane fx:id="BeiJingClock"/>
                   <ClockPane fx:id="ShanghaiClock"/>
                   <ClockPane fx:id="HongKongClock"/>
                </children>
             </HBox>
-            <HBox prefHeight="160.0" prefWidth="200.0">
+            <HBox prefHeight="170.0" prefWidth="200.0">
                <children>
                   <ClockPane fx:id="LondonClock"/>
                   <ClockPane fx:id="AmericanClock"/>

@@ -168,6 +168,7 @@
             </ButtonBar>
             <MenuButton mnemonicParsing="false" text="系统菜单" GridPane.rowIndex="1">
               <items>
+                  <MenuItem mnemonicParsing="false" text="全屏" />
                 <MenuItem mnemonicParsing="false" text="退出登录" />
                 <MenuItem mnemonicParsing="false" text="Action 2" />
               </items>
