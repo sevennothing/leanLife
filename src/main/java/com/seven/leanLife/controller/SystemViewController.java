@@ -77,7 +77,8 @@ public class SystemViewController {
     private Tab clockTab;
     @FXML
     private TimeToolViewController timeToolController;
-    
+
+
     @FXML
     private void initialize() {
         currentMenuLabel  = noteManLabel;
@@ -86,6 +87,7 @@ public class SystemViewController {
         toolsTabPane.visibleProperty().set(false);
         handleNoteManLabelClickedAction();
 
+
     }
     /**
      * 响应点击笔记管理
@@ -93,6 +95,7 @@ public class SystemViewController {
     @FXML
     private void handleNoteManLabelClickedAction(){
         process_pre_menu_view(noteManLabel, noteTabPane);
+        paintDefaultToolbar();
     }
 
     /**
@@ -101,6 +104,7 @@ public class SystemViewController {
     @FXML
     private void handleDiaryManLabelClickedAction(){
         process_pre_menu_view(diaryManLabel, diaryTabPane);
+        paintDefaultToolbar();
     }
 
     /**
@@ -174,6 +178,7 @@ public class SystemViewController {
     private void handleClockToolClickedAction(){
         SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
         selectionModel.select(clockTab);
+        paintTimetoolToolbar();
     }
     
     private void process_pre_menu_view(Label menuLabel, TabPane menuTab){
@@ -220,6 +225,52 @@ public class SystemViewController {
     private void handleFullScreen(){
         Stage stage = mainApp.getStage();
         stage.setFullScreen(true);
+    }
+
+
+    /**
+     * tool-bar handle
+     */
+    /* 工具栏 */
+    @FXML
+    private AnchorPane toolbarPane;
+    private void paintDefaultToolbar(){
+        toolbarPane.getChildren().clear();
+
+        ToolBar toolbar = new ToolBar();
+
+        ToolBarItem saveI = new ToolBarItem();
+
+        saveI.setText("保存");
+        URL url = getClass().getClassLoader().getResource("img/tools/save.png");
+        saveI.setImage(new Image(url.toExternalForm()));
+        toolbar.addItem(saveI);
+
+        ToolBarItem cancelI = new ToolBarItem();
+        url = getClass().getClassLoader().getResource("img/tools/cancel.png");
+        cancelI.setImage(new Image(url.toExternalForm()));
+        cancelI.setText("取消");
+        toolbar.addItem(cancelI);
+
+        toolbarPane.getChildren().addAll(toolbar);
+    }
+
+    private void paintTimetoolToolbar(){
+        toolbarPane.getChildren().clear();
+        ToolBar toolbar = new ToolBar();
+        ToolBarItem flushI = new ToolBarItem();
+        flushI.setText("刷新");
+        ToolBarItem consoleWinI = new ToolBarItem();
+        consoleWinI.setText("控制台");
+        toolbar.addItem(flushI);
+        toolbar.addItem(consoleWinI);
+
+        toolbarPane.getChildren().add(toolbar);
+    }
+
+    @FXML
+    private void handleSave(){
+        System.out.println("响应保存");
     }
     /**
      *	得到主控制器的引用

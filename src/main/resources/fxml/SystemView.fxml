@@ -21,6 +21,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import com.seven.leanLife.controller.ToolBar?>
+<?import com.seven.leanLife.controller.ToolBarItem?>
+<?import com.seven.leanLife.controller.ClockPane?>
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seven.leanLife.controller.SystemViewController">
     <stylesheets>
         <URL value="@/css/systemview.css" />
@@ -150,22 +153,8 @@
                   </TabPane>
                </children>
             </AnchorPane>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <buttons>
-                  <ButtonBar prefHeight="30.0" prefWidth="709.0">
-                    <buttons>
-                      <Button mnemonicParsing="false" text="存盘" textAlignment="CENTER">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                        </Button>
-                    </buttons>
-                     <padding>
-                        <Insets left="10.0" right="10.0" />
-                     </padding>
-                  </ButtonBar>
-               </buttons>
-            </ButtonBar>
+             <AnchorPane fx:id="toolbarPane" prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+             </AnchorPane>
             <MenuButton mnemonicParsing="false" text="系统菜单" GridPane.rowIndex="1">
               <items>
                   <MenuItem fx:id="fullScreen" mnemonicParsing="false" onAction="#handleFullScreen" text="全屏" />
