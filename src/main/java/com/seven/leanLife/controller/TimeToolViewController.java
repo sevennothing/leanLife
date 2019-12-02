@@ -192,7 +192,7 @@ public class TimeToolViewController {
 
     public void setMw(MonitorWin mw){
         this.sysMw = mw;
-        mw.publishMsg("Time Tool opened");
+        //mw.publishMsg("Time Tool opened");
     }
 
 }

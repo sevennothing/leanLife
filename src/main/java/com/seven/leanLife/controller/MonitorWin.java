@@ -1,4 +1,5 @@
 package com.seven.leanLife.controller;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,9 +16,10 @@ public class MonitorWin extends Pane{
     private TextArea monInfoArea = null;
     private Button clrButton = null;
     private Button cpyButton = null;
-    private SimpleStringProperty isClosed;
+    private SimpleBooleanProperty isClosed;
 
     public MonitorWin(){
+        isClosed = new SimpleBooleanProperty(false);
         Stage monStage = new Stage();
         StackPane pane = new StackPane();
         monInfoArea = new TextArea();
@@ -65,9 +67,17 @@ public class MonitorWin extends Pane{
             @Override
             public void handle(WindowEvent event) {
                 publishMsg("监控窗口被关闭");
-                isClosed.set("closed");
+                setIsClosed(true);
             }
         });
+    }
+
+    public void setIsClosed(Boolean value){
+        isClosed.set(value);
+    }
+
+    public SimpleBooleanProperty isClosedProperty(){
+        return isClosed;
     }
 
 

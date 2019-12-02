@@ -143,7 +143,7 @@
                         </Tab>
                         <Tab fx:id="clockTab" closable="true" text="时间工具">
                             <content>
-                                <fx:include fx:id="timeToolController" source="/fxml/timeToolView.fxml" />
+                                <fx:include fx:id="timeTool" source="/fxml/timeToolView.fxml" />
                             </content>
                         </Tab>
                      </tabs>

@@ -11,6 +11,8 @@ import com.seven.leanLife.utils.moreUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -203,10 +205,15 @@ public class SystemViewController {
             return;
         }
         sysMw = new MonitorWin();
-        sysMw.publishMsg("您打开了一个监控窗口");
-        sysMw.publishMsg("祝您使用愉快");
+        //sysMw.publishMsg("您打开了一个监控窗口");
+        //sysMw.publishMsg("祝您使用愉快");
         monitor.msgProperty().addListener(((observable, oldValue, newValue) -> sysMw.publishMsg(newValue)));
+        sysMw.isClosedProperty().addListener((observable, oldValue, newValue) -> monitorWindowClosed());
         timeToolController.setMw(sysMw);
+    }
+    private void monitorWindowClosed(){
+        System.out.println("监控串口被关闭");
+        sysMw = null;
     }
 
     @FXML
