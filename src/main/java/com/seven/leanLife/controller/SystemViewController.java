@@ -205,7 +205,7 @@ public class SystemViewController {
             return;
         }
         sysMw = new MonitorWin();
-        //sysMw.publishMsg("您打开了一个监控窗口");
+        sysMw.publishMsg("您打开了一个监控窗口");
         //sysMw.publishMsg("祝您使用愉快");
         monitor.msgProperty().addListener(((observable, oldValue, newValue) -> sysMw.publishMsg(newValue)));
         sysMw.isClosedProperty().addListener((observable, oldValue, newValue) -> monitorWindowClosed());

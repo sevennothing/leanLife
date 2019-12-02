@@ -23,6 +23,7 @@ public class MonitorWin extends Pane{
         Stage monStage = new Stage();
         StackPane pane = new StackPane();
         monInfoArea = new TextArea();
+        monInfoArea.setId("msgArea");
         monInfoArea.setWrapText(true);
         monInfoArea.setPrefSize(w,h);
         monInfoArea.setEditable(false);
@@ -61,6 +62,8 @@ public class MonitorWin extends Pane{
         monStage.setScene(scene);
         monStage.setTitle("监控终端");
         monStage.setAlwaysOnTop(true);
+
+        scene.getStylesheets().add(getClass().getResource("/css/monitorWin.css").toExternalForm());
         monStage.show();
 
         monStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

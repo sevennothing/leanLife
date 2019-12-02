@@ -1,0 +1,17 @@
+.button {
+    -fx-background-color: lightcyan;
+    -fx-border-color:lightgoldenrodyellow;
+    -fx-opacity:0.5;
+}
+
+#msgArea{
+    -fx-background-color:black;
+    -fx-text-fill:lightgreen;
+    -fx-border-radius: 8;
+    -fx-font-size:12px;
+    -fx-border-color: burlywood;
+}
+
+.text-area .scroll-pane .content{
+    -fx-background-color:black;
+}
