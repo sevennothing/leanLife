@@ -22,6 +22,8 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
+    compile fileTree(dir: 'lib', includes: ['*.jar'])
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 

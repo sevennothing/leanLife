@@ -3,6 +3,7 @@ package com.seven.leanLife.utils;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -61,14 +62,15 @@ public class JDBCTool {
 	/**
 	 *	得到数据连接
 	 */
-	public static Connection getConnection() {
+	public static Connection getConnection(Properties properties) {
 		Connection conn = null;
 		try {
-			Properties properties = new Properties();
-			FileInputStream fis = null;
-			try {
+			//Properties properties = new Properties();
+			//FileInputStream fis = null;
+			    /*
 				fis = new FileInputStream("conf/db.properties");
 				properties.load(fis);
+				*/
 				String url = null;
 				String dbType = properties.getProperty("databaseType");
 				if(dbType.equals("mysql")){
@@ -86,7 +88,11 @@ public class JDBCTool {
 					url = "jdbc:sqlite:"+properties.getProperty("dataPath")+
 							"/"+properties.getProperty("database");
 					//创建连接
-					conn = DriverManager.getConnection(url, properties);
+					try {
+						conn = DriverManager.getConnection(url, properties);
+					}catch (SQLException e){
+						System.out.println(e.toString());
+					}
 				}else{
 					url = null;
 					System.out.println("不支持的数据库" + properties.getProperty("databaseType"));
@@ -95,19 +101,6 @@ public class JDBCTool {
 				checkDatabase(conn);
 
 //				System.out.println("数据库连接成功");
-			}catch(FileNotFoundException e) {
-				e.printStackTrace();
-			}catch(IOException e) {
-				e.printStackTrace();
-			}finally {
-				if(fis != null) {
-					try {
-						fis.close();
-					}catch(IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		}catch(SQLException e) {
@@ -148,14 +141,14 @@ public class JDBCTool {
 	/**
 	 *	更新数据 包括插入 删除 和更新
 	 */
-	public static boolean executeInsertDeleteUpdate(String sql, Object...args) {
+	public static boolean executeInsertDeleteUpdate(Properties conf, String sql, Object...args) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		boolean isOk = false;
 
 		try {
 			//得到连接
-			conn = JDBCTool.getConnection();
+			conn = JDBCTool.getConnection(conf);
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -183,12 +176,12 @@ public class JDBCTool {
 	/**
 	 *	得到指定要求的日记列表结果
 	 */
-	public static ArrayList<Dairy> getDairyList(String sql, Object...args){
+	public static ArrayList<Dairy> getDairyList(Properties conf,String sql, Object...args){
 		ArrayList<Dairy> dList = new ArrayList<>();
 
 		ResultSet res = null;
 		PreparedStatement pstmt = null;
-		Connection conn = JDBCTool.getConnection();
+		Connection conn = JDBCTool.getConnection(conf);
 
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -223,11 +216,11 @@ public class JDBCTool {
 	/**
 	 *	检查用户是否存在
 	 */
-	public static User getUser(String sql, Object...args) {
+	public static User getUser(Properties conf,String sql, Object...args) {
 		User user = null;
 		ResultSet res = null;
 		PreparedStatement pstmt = null;
-		Connection conn = JDBCTool.getConnection();
+		Connection conn = JDBCTool.getConnection(conf);
 		try {
 			pstmt = conn.prepareStatement(sql);
 

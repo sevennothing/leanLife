@@ -121,7 +121,7 @@ public class LoginViewController{
         }
         if(CheckValidTool.isValidUserName(userName) && CheckValidTool.isValidPassword(password)) {
             String sql = "select * from user where name=? and password=?";
-            User user= JDBCTool.getUser(sql, userName, password);
+            User user= JDBCTool.getUser(mainApp.dbConf, sql, userName, password);
             if(user != null) {
                 //设置当前用户
                 mainApp.setUser(user);

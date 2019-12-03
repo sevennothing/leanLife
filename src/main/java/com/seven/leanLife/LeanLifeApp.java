@@ -18,7 +18,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Properties;
 
 @SpringBootApplication
 public class LeanLifeApp extends Application{
@@ -30,6 +32,7 @@ public class LeanLifeApp extends Application{
     private Scene scene;
     //标识当前用户
     private User user;
+    public Properties dbConf;
 
     public static void main(String[] args) {
         //SpringApplication.run(LeanLifeApp.class, args);
@@ -43,6 +46,15 @@ public class LeanLifeApp extends Application{
         fxmlLoader.setControllerFactory(springContext::getBean);
         //System.out.println("加载语言配置");
         languageConf = new LangConfig();
+        // 加载数据库配置文件
+        dbConf = new Properties();
+        try {
+            InputStream in = this.getClass().getResourceAsStream("/config/db.properties");
+            dbConf.load(in);
+            in.close();
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void start(Stage primaryStage) throws Exception{

@@ -252,7 +252,7 @@ public class RegistViewController {
 	 */
 	public boolean addUser(String name, String password, int secQueIndex, String answer) {
 		String sql = "insert into user(name, password, secretQuestion, secretAnswer) values(?,?,?,?)";
-		if(JDBCTool.executeInsertDeleteUpdate(sql, name,password,secQueIndex,answer)) {
+		if(JDBCTool.executeInsertDeleteUpdate(mainApp.dbConf, sql, name,password,secQueIndex,answer)) {
 			return true;
 		}else {
 			return false;
