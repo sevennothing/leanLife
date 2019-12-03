@@ -249,7 +249,7 @@ public class SystemViewController {
 
         ToolBarItem saveI = new ToolBarItem();
 
-        String value = mainApp.getFeild("save");
+        String value = mainApp.languageConf.getFeild("save");
         saveI.setText(value);
 
         URL url = getClass().getClassLoader().getResource("img/tools/save.png");
@@ -272,7 +272,7 @@ public class SystemViewController {
         ToolBarItem cancelI = new ToolBarItem();
         url = getClass().getClassLoader().getResource("img/tools/cancel.png");
         cancelI.setImage(new Image(url.toExternalForm()));
-        value = mainApp.getFeild("cancel");
+        value = mainApp.languageConf.getFeild("cancel");
         cancelI.setText(value);
         toolbar.addItem(cancelI);
 
@@ -284,10 +284,10 @@ public class SystemViewController {
         toolbarPane.getChildren().clear();
         ToolBar toolbar = new ToolBar();
         ToolBarItem flushI = new ToolBarItem();
-        value = mainApp.getFeild("flush");
+        value = mainApp.languageConf.getFeild("flush");
         flushI.setText(value);
         ToolBarItem consoleWinI = new ToolBarItem();
-        value = mainApp.getFeild("monitor.terminal");
+        value = mainApp.languageConf.getFeild("monitor.terminal");
         consoleWinI.setText(value);
         toolbar.addItem(flushI);
         toolbar.addItem(consoleWinI);

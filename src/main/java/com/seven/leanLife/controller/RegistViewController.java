@@ -95,30 +95,30 @@ public class RegistViewController {
 	 */
 	public void langFlush(){
 		String value;
-		value = mainApp.getFeild("username");
+		value = mainApp.languageConf.getFeild("username");
 		usernameLabel.setText(value);
-		value = mainApp.getFeild("password");
+		value = mainApp.languageConf.getFeild("password");
 		passwordLabel.setText(value);
 
-		value = mainApp.getFeild("secret.answer");
+		value = mainApp.languageConf.getFeild("secret.answer");
 		secretAnswerLabel.setText(value);
 
-		value = mainApp.getFeild("verificationCode");
+		value = mainApp.languageConf.getFeild("verificationCode");
 		verificationCodeLabel.setText(value);
 
-		value = mainApp.getFeild("secret.question");
+		value = mainApp.languageConf.getFeild("secret.question");
 		secretQuestionLabel.setText(value);
 
-		value = mainApp.getFeild("verificationCode.answer");
+		value = mainApp.languageConf.getFeild("verificationCode.answer");
 		verificationCodeAnswerLabel.setText(value);
 
-		value = mainApp.getFeild("reg.username.prompt");
+		value = mainApp.languageConf.getFeild("reg.username.prompt");
 		userNameField.setPromptText(value);
 
-		value = mainApp.getFeild("reg.password.prompt");
+		value = mainApp.languageConf.getFeild("reg.password.prompt");
 		passwordField.setPromptText(value);
 
-		value = mainApp.getFeild("reg.secret.answer.prompt");
+		value = mainApp.languageConf.getFeild("reg.secret.answer.prompt");
 		secretAnswerField.setPromptText(value);
 	}
 

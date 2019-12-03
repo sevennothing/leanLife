@@ -85,16 +85,16 @@ public class LoginViewController{
     public void langFlush(){
         /* 语言调整 */
         String value;
-        value = mainApp.getFeild("systemName");
+        value = mainApp.languageConf.getFeild("systemName");
         systemName.setText(value);
-        value = mainApp.getFeild("login");
+        value = mainApp.languageConf.getFeild("login");
         loginButton.setText(value);
-        value = mainApp.getFeild("regist");
+        value = mainApp.languageConf.getFeild("regist");
         registButton.setText(value);
 
-        value = mainApp.getFeild("username.prompt");
+        value = mainApp.languageConf.getFeild("username.prompt");
         userNameField.setPromptText(value);
-        value = mainApp.getFeild("password.prompt");
+        value = mainApp.languageConf.getFeild("password.prompt");
         passwordField.setPromptText(value);
     }
 

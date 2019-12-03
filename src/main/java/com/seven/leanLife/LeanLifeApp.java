@@ -16,9 +16,6 @@ import javafx.scene.image.Image;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.boot.CommandLineRunner;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,7 +23,7 @@ import java.net.URL;
 @SpringBootApplication
 public class LeanLifeApp extends Application{
     private ConfigurableApplicationContext springContext;
-    private LangConfig langconf;
+    public LangConfig languageConf;
     private Parent rootNode;
     private FXMLLoader fxmlLoader;
     private Stage stage;
@@ -45,7 +42,7 @@ public class LeanLifeApp extends Application{
         fxmlLoader = new FXMLLoader();
         fxmlLoader.setControllerFactory(springContext::getBean);
         //System.out.println("加载语言配置");
-        langconf = new LangConfig();
+        languageConf = new LangConfig();
     }
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -173,10 +170,6 @@ public class LeanLifeApp extends Application{
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getFeild(String name){
-        return langconf.getFeild(name);
     }
 
     /*

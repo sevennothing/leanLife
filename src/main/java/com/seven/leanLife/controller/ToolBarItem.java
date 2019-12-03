@@ -45,6 +45,7 @@ public class ToolBarItem  extends Pane {
                 e.process();
             }
         });
+
     }
 
     public void paintItem(){
