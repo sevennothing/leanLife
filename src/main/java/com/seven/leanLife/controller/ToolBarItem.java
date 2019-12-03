@@ -1,20 +1,27 @@
 package com.seven.leanLife.controller;
 
+import com.seven.leanLife.utils.EventProcess;
 import com.sun.javafx.scene.DirtyBits;
 import com.sun.javafx.tk.Toolkit;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
 
+/***
+ * @// TODO: 2019/12/3  快捷键
+ */
 public class ToolBarItem  extends Pane {
     Image icon = null;
+    Button bt ;
     public ToolBarItem(){
         textProperty().addListener((observable, oldValue, newValue) ->{
             paintItem();
@@ -22,10 +29,29 @@ public class ToolBarItem  extends Pane {
         getStyleClass().add("toolbar-item");
     }
 
+    public void bindProcess(EventProcess e){
+        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                e.process();
+            }
+        });
+
+        KeyCombination kc = new KeyCodeCombination(KeyCode.S,KeyCombination.SHORTCUT_DOWN);
+        this.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                System.out.println("键盘按下了按键=" + event.getCode().name());
+                e.process();
+            }
+        });
+    }
+
     public void paintItem(){
         //System.out.println("paint Toolbar item");
         StackPane stackPane = new StackPane();
         ImageView imgView = new ImageView();
+
         Label itemText = new Label();
         itemText.getStyleClass().add("toolbar-item-text");
         itemText.setTextAlignment(TextAlignment.CENTER);
@@ -98,6 +124,7 @@ public class ToolBarItem  extends Pane {
     public final EventHandler<ActionEvent> getOnAction() { return onActionProperty().get(); }
     private ObjectProperty<EventHandler<ActionEvent>> onAction = new ObjectPropertyBase<EventHandler<ActionEvent>>() {
         @Override protected void invalidated() {
+            System.out.println("8888888888");
             setEventHandler(ActionEvent.ACTION, get());
         }
 

@@ -7,6 +7,7 @@ package com.seven.leanLife.controller;
 
 import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.model.Monitor;
+import com.seven.leanLife.utils.EventProcess;
 import com.seven.leanLife.utils.moreUtils;
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +32,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -251,9 +254,19 @@ public class SystemViewController {
 
         URL url = getClass().getClassLoader().getResource("img/tools/save.png");
         saveI.setImage(new Image(url.toExternalForm()));
+
         saveI.setOnAction((ActionEvent e)->{
+            System.out.println("clicked");
             handleSaveAction();
         });
+        saveI.bindProcess(new EventProcess(){
+            @Override
+            public int process(){
+                handleSaveAction();
+                return 0;
+            }
+        });
+
         toolbar.addItem(saveI);
 
         ToolBarItem cancelI = new ToolBarItem();
