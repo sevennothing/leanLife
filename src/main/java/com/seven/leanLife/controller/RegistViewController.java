@@ -83,6 +83,45 @@ public class RegistViewController {
 	//验证码答案
 	private int realVerCodeAnswer;
 
+	@FXML private Label usernameLabel;
+	@FXML private Label passwordLabel;
+	@FXML private Label secretAnswerLabel;
+	@FXML private Label verificationCodeLabel;
+	@FXML private Label secretQuestionLabel;
+	@FXML private Label verificationCodeAnswerLabel;
+
+	/**
+	 * 刷新语言支持
+	 */
+	public void langFlush(){
+		String value;
+		value = mainApp.getFeild("username");
+		usernameLabel.setText(value);
+		value = mainApp.getFeild("password");
+		passwordLabel.setText(value);
+
+		value = mainApp.getFeild("secret.answer");
+		secretAnswerLabel.setText(value);
+
+		value = mainApp.getFeild("verificationCode");
+		verificationCodeLabel.setText(value);
+
+		value = mainApp.getFeild("secret.question");
+		secretQuestionLabel.setText(value);
+
+		value = mainApp.getFeild("verificationCode.answer");
+		verificationCodeAnswerLabel.setText(value);
+
+		value = mainApp.getFeild("reg.username.prompt");
+		userNameField.setPromptText(value);
+
+		value = mainApp.getFeild("reg.password.prompt");
+		passwordField.setPromptText(value);
+
+		value = mainApp.getFeild("reg.secret.answer.prompt");
+		secretAnswerField.setPromptText(value);
+	}
+
 	/**
 	 *	处理注册按钮提交事件
 	 */

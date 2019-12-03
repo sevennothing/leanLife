@@ -51,19 +51,19 @@ public class SystemViewController {
     public static Monitor monitor = new Monitor();
     @FXML
     private Label nameLabel;
-    
+
     /* 笔记功能 */
     @FXML
     private Label noteManLabel;
     @FXML
     private TabPane noteTabPane;
-    
+
     /* 日记功能 */
     @FXML
     private Label diaryManLabel;
     @FXML
     private TabPane diaryTabPane;
-    
+
     /* 便捷工具 */
     @FXML
     private Label toolsManLabel;
@@ -78,6 +78,9 @@ public class SystemViewController {
     @FXML
     private TimeToolViewController timeToolController;
 
+    public SystemViewController(LeanLifeApp mainApp){
+        setMainApp(mainApp);
+    }
 
     @FXML
     private void initialize() {
@@ -86,7 +89,6 @@ public class SystemViewController {
         diaryTabPane.visibleProperty().set(false);
         toolsTabPane.visibleProperty().set(false);
         handleNoteManLabelClickedAction();
-
 
     }
     /**
@@ -118,61 +120,61 @@ public class SystemViewController {
         url = getClass().getClassLoader().getResource("img/tools/clock.jpg");
         clockToolImg.setImage(new Image(url.toExternalForm()));
     }
-    
+
     @FXML
     /* 取色器功能 */
     private void handleColorToolClickedAction(){
         System.out.println("准备启动颜色工具");
-       
-          Tab colorTab = new Tab();
-          colorTab.setText("取色器");
-          colorTab.setClosable(true);
-          toolsTabPane.getTabs().add(colorTab);
-          
-          Label colorLabel = new Label();
-          colorLabel.setText("取色器");
-          
-          ColorPicker colorPicker  = new ColorPicker();
-          Button cpyBt = new Button();
-          cpyBt.setText("复制");
 
-          
-        cpyBt.setOnAction(new EventHandler<ActionEvent>() {	     
+        Tab colorTab = new Tab();
+        colorTab.setText("取色器");
+        colorTab.setClosable(true);
+        toolsTabPane.getTabs().add(colorTab);
+
+        Label colorLabel = new Label();
+        colorLabel.setText("取色器");
+
+        ColorPicker colorPicker  = new ColorPicker();
+        Button cpyBt = new Button();
+        cpyBt.setText("复制");
+
+
+        cpyBt.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 monitor.setMsg("复制颜色值");
                 //System.out.println("复制颜色值");
-               String  colorStr = colorPicker.getValue().toString();
-               //System.out.println("颜色值:"+ colorStr  );
+                String  colorStr = colorPicker.getValue().toString();
+                //System.out.println("颜色值:"+ colorStr  );
                 //monitor.setMsg("颜色值:"+ colorStr  );
                 sysMw.publishMsg("颜色值:"+ colorStr  );
 
-               Clipboard clipboard = Clipboard.getSystemClipboard();
-               final ClipboardContent content = new ClipboardContent();
-               content.putString(colorStr);
-               clipboard.setContent(content);
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                final ClipboardContent content = new ClipboardContent();
+                content.putString(colorStr);
+                clipboard.setContent(content);
 
             }
 
         });
-                  
-          HBox hbox = new HBox();
-          //hbox.setAlignment(Pos.CENTER);
-          hbox.setSpacing(30);
-          hbox.getChildren().add(colorLabel);
-          hbox.getChildren().add(colorPicker);
-          hbox.getChildren().add(cpyBt);
-          
-          VBox vbox = new VBox();
-          //vbox.setAlignment(Pos.CENTER);
-          
-          vbox.getChildren().add(hbox);
-          colorTab.setContent(vbox);
-          
-          SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
-          selectionModel.select(colorTab);
+
+        HBox hbox = new HBox();
+        //hbox.setAlignment(Pos.CENTER);
+        hbox.setSpacing(30);
+        hbox.getChildren().add(colorLabel);
+        hbox.getChildren().add(colorPicker);
+        hbox.getChildren().add(cpyBt);
+
+        VBox vbox = new VBox();
+        //vbox.setAlignment(Pos.CENTER);
+
+        vbox.getChildren().add(hbox);
+        colorTab.setContent(vbox);
+
+        SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
+        selectionModel.select(colorTab);
     }
-    
+
     @FXML
     /* 时间戳工具功能 */
     private void handleClockToolClickedAction(){
@@ -180,21 +182,24 @@ public class SystemViewController {
         selectionModel.select(clockTab);
         paintTimetoolToolbar();
     }
-    
+
     private void process_pre_menu_view(Label menuLabel, TabPane menuTab){
-        currentMenuLabel.setStyle("-fx-background-color:cornsilk ;"); 
+        currentMenuLabel.setStyle("-fx-background-color:cornsilk ;");
         if(currentMenuLabel == noteManLabel){
-           noteTabPane.visibleProperty().set(false);
+            noteTabPane.visibleProperty().set(false);
         }else if(currentMenuLabel == diaryManLabel){
-           diaryTabPane.visibleProperty().set(false);
+            diaryTabPane.visibleProperty().set(false);
         }else if(currentMenuLabel == toolsManLabel){
-           toolsTabPane.visibleProperty().set(false);
+            toolsTabPane.visibleProperty().set(false);
         }
         menuTab.visibleProperty().set(true);
-        menuLabel.setStyle("-fx-background-color:#99CCFF ;"); 
+        menuLabel.setStyle("-fx-background-color:#99CCFF ;");
         currentMenuLabel = menuLabel;
     }
-    
+
+    private void handleSaveAction(){
+        System.out.println("保存响应");
+    }
     /**
      *	退出登录
      */
@@ -210,7 +215,7 @@ public class SystemViewController {
             return;
         }
         sysMw = new MonitorWin();
-        sysMw.publishMsg("您打开了一个监控窗口");
+        //sysMw.publishMsg("您打开了一个监控窗口");
         //sysMw.publishMsg("祝您使用愉快");
         monitor.msgProperty().addListener(((observable, oldValue, newValue) -> sysMw.publishMsg(newValue)));
         sysMw.isClosedProperty().addListener((observable, oldValue, newValue) -> monitorWindowClosed());
@@ -241,27 +246,36 @@ public class SystemViewController {
 
         ToolBarItem saveI = new ToolBarItem();
 
-        saveI.setText("保存");
+        String value = mainApp.getFeild("save");
+        saveI.setText(value);
+
         URL url = getClass().getClassLoader().getResource("img/tools/save.png");
         saveI.setImage(new Image(url.toExternalForm()));
+        saveI.setOnAction((ActionEvent e)->{
+            handleSaveAction();
+        });
         toolbar.addItem(saveI);
 
         ToolBarItem cancelI = new ToolBarItem();
         url = getClass().getClassLoader().getResource("img/tools/cancel.png");
         cancelI.setImage(new Image(url.toExternalForm()));
-        cancelI.setText("取消");
+        value = mainApp.getFeild("cancel");
+        cancelI.setText(value);
         toolbar.addItem(cancelI);
 
         toolbarPane.getChildren().addAll(toolbar);
     }
 
     private void paintTimetoolToolbar(){
+        String value;
         toolbarPane.getChildren().clear();
         ToolBar toolbar = new ToolBar();
         ToolBarItem flushI = new ToolBarItem();
-        flushI.setText("刷新");
+        value = mainApp.getFeild("flush");
+        flushI.setText(value);
         ToolBarItem consoleWinI = new ToolBarItem();
-        consoleWinI.setText("控制台");
+        value = mainApp.getFeild("monitor.terminal");
+        consoleWinI.setText(value);
         toolbar.addItem(flushI);
         toolbar.addItem(consoleWinI);
 
@@ -290,5 +304,5 @@ public class SystemViewController {
     public MonitorWin getSysMw(){
         return sysMw;
     }
-    
+
 }

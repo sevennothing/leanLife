@@ -24,7 +24,7 @@
 <?import com.seven.leanLife.controller.ToolBar?>
 <?import com.seven.leanLife.controller.ToolBarItem?>
 <?import com.seven.leanLife.controller.ClockPane?>
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seven.leanLife.controller.SystemViewController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@/css/systemview.css" />
     </stylesheets>

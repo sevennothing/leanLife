@@ -23,7 +23,7 @@ public class ToolBarItem  extends Pane {
     }
 
     public void paintItem(){
-        System.out.println("paint Toolbar item");
+        //System.out.println("paint Toolbar item");
         StackPane stackPane = new StackPane();
         ImageView imgView = new ImageView();
         Label itemText = new Label();

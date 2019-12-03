@@ -37,11 +37,13 @@ import org.springframework.util.ResourceUtils;
 public class LoginViewController{
     private LeanLifeApp mainApp;
     @FXML
+    private Label systemName;
+    @FXML
     private Label userNameLabel;
     @FXML
     private Label passwordLabel;
     @FXML
-    private Button LoginButton;
+    private Button loginButton;
     @FXML
     private Button registButton;
     @FXML
@@ -75,6 +77,25 @@ public class LoginViewController{
 
         leftImageView.setPreserveRatio(true);
         leftImageView.setSmooth(true);
+    }
+
+    /**
+     *  刷新显示语言
+     */
+    public void langFlush(){
+        /* 语言调整 */
+        String value;
+        value = mainApp.getFeild("systemName");
+        systemName.setText(value);
+        value = mainApp.getFeild("login");
+        loginButton.setText(value);
+        value = mainApp.getFeild("regist");
+        registButton.setText(value);
+
+        value = mainApp.getFeild("username.prompt");
+        userNameField.setPromptText(value);
+        value = mainApp.getFeild("password.prompt");
+        passwordField.setPromptText(value);
     }
 
     /**

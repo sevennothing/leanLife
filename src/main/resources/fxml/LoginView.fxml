@@ -40,7 +40,7 @@
                            <children>
                               <BorderPane layoutX="-6.0" layoutY="-3.0" prefHeight="275.0" prefWidth="325.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-14.0">
                                  <top>
-                                    <Label alignment="CENTER" prefHeight="140.0" prefWidth="239.0" text="Lean-life System" BorderPane.alignment="CENTER">
+                                    <Label fx:id="systemName" alignment="CENTER" prefHeight="140.0" prefWidth="239.0" text="Lean-life System" BorderPane.alignment="CENTER">
                                        <font>
                                           <Font name="Calibri Italic" size="25.0" />
                                        </font>
@@ -64,7 +64,7 @@
                                           <HBox alignment="CENTER" prefHeight="40.0" prefWidth="325.0" spacing="70.0">
                                              <children>
                                                 <Button fx:id="registButton" mnemonicParsing="false" onAction="#handleRegistButtonAction" prefHeight="40.0" prefWidth="60.0" text="注册" />
-                                                <Button fx:id="LoginButton" defaultButton="true" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="40.0" prefWidth="60.0" text="登录" />
+                                                <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="40.0" prefWidth="60.0" text="登录" />
                                              </children>
                                           </HBox>
                                        </children>

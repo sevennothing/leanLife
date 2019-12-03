@@ -4,6 +4,7 @@ import com.seven.leanLife.controller.LoginViewController;
 import com.seven.leanLife.controller.RegistViewController;
 import com.seven.leanLife.controller.SystemViewController;
 import com.seven.leanLife.model.User;
+import com.seven.leanLife.utils.LangConfig;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,6 +26,7 @@ import java.net.URL;
 @SpringBootApplication
 public class LeanLifeApp extends Application{
     private ConfigurableApplicationContext springContext;
+    private LangConfig langconf;
     private Parent rootNode;
     private FXMLLoader fxmlLoader;
     private Stage stage;
@@ -42,6 +44,8 @@ public class LeanLifeApp extends Application{
         springContext = SpringApplication.run(LeanLifeApp.class);
         fxmlLoader = new FXMLLoader();
         fxmlLoader.setControllerFactory(springContext::getBean);
+        //System.out.println("加载语言配置");
+        langconf = new LangConfig();
     }
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -73,6 +77,7 @@ public class LeanLifeApp extends Application{
             stage.getIcons().add(new Image(url.toExternalForm()));
             LoginViewController lgController = (LoginViewController)replaceSceneContent("/fxml/LoginView.fxml");
             lgController.setMainApp(this);
+            lgController.langFlush();
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -95,7 +100,7 @@ public class LeanLifeApp extends Application{
             RegistViewController regController = (RegistViewController)loader.getController();
             System.out.println(regController);
             regController.setMainApp(this);
-
+            regController.langFlush();
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -103,6 +108,8 @@ public class LeanLifeApp extends Application{
 
     /**
      *	显示系统主界面
+     *  为了方便处理多语言，不在fxml中指定控制器；
+     *  new 控制器时将mainApp传递进去
      */
     public void showSystemView() {
         try {
@@ -110,31 +117,39 @@ public class LeanLifeApp extends Application{
             stage.getIcons().add(new Image("file:/img/home.png"));
             //stage.setMaximized(true);
             //stage.setFullScreen(true);
-            SystemViewController svController = (SystemViewController)replaceSceneContent("/fxml/SystemView.fxml");
-            svController.setMainApp(this);
+
+            SystemViewController svController = new SystemViewController(this);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SystemView.fxml"));
+            loader.setController(svController);
+            replaceSceneContent(loader);
+
         }catch(Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    /**
-     *	显示指定的视图
-     */
-    private Object replaceSceneContent(String fxmlFile) {
-        FXMLLoader loader = new FXMLLoader();
-        //loader.setLocation(LeanLifeApp.class.getResource(fxmlFile));
-        loader.setLocation(getClass().getResource(fxmlFile));
-
+    private void replaceSceneContent(FXMLLoader loader){
         AnchorPane ap = null;
         try {
             ap = (AnchorPane)loader.load();
         }catch(IOException e) {
             e.printStackTrace();
         }
+
         scene = new Scene(ap);
         stage.setScene(scene);
         stage.setResizable(false);
+    }
+
+    /**
+     *	显示指定的视图
+     */
+    private Object replaceSceneContent(String fxmlFile) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxmlFile));
+        replaceSceneContent(loader);
+
         return loader.getController();
     }
 
@@ -158,6 +173,10 @@ public class LeanLifeApp extends Application{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getFeild(String name){
+        return langconf.getFeild(name);
     }
 
     /*

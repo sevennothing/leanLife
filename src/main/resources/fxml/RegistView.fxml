@@ -17,32 +17,32 @@
    <center>
       <GridPane prefHeight="0.0" prefWidth="565.0" vgap="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label prefHeight="30.0" text="用户名">
+            <Label fx:id="usernameLabel" prefHeight="30.0" text="用户名">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label prefHeight="30.0" text="密码" GridPane.rowIndex="1">
+            <Label fx:id="passwordLabel" prefHeight="30.0" text="密码" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label minHeight="0.0" prefHeight="30.0" prefWidth="80.0" text="密保答案" GridPane.rowIndex="3">
+            <Label fx:id="secretAnswerLabel" minHeight="0.0" prefHeight="30.0" prefWidth="80.0" text="密保答案" GridPane.rowIndex="3">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label prefHeight="30.0" text="验证码" GridPane.rowIndex="4">
+            <Label fx:id="verificationCodeLabel" prefHeight="30.0" text="验证码" GridPane.rowIndex="4">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label prefHeight="30.0" text="密保问题" GridPane.rowIndex="2">
+            <Label fx:id="secretQuestionLabel" prefHeight="30.0" text="密保问题" GridPane.rowIndex="2">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label prefHeight="30.0" text="验证码答案" GridPane.rowIndex="5">
+            <Label fx:id="verificationCodeAnswerLabel" prefHeight="30.0" text="验证码答案" GridPane.rowIndex="5">
                <font>
                   <Font size="18.0" />
                </font>
