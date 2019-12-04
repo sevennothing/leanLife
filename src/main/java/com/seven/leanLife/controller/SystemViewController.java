@@ -22,12 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -35,6 +30,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -54,6 +50,13 @@ public class SystemViewController {
     public static Monitor monitor = new Monitor();
     @FXML
     private Label nameLabel;
+
+    /* 主布局 */
+    @FXML private GridPane mainGridPane;
+    /* 左侧主菜单面板 */
+    @FXML private AnchorPane mainMenuPane;
+    /* 中间主视图面板 */
+    @FXML private AnchorPane mainViewPane;
 
     /* 笔记功能 */
     @FXML
@@ -85,14 +88,47 @@ public class SystemViewController {
         setMainApp(mainApp);
     }
 
+    private Boolean hideMainMenu;
+
     @FXML
     private void initialize() {
+        hideMainMenu = false;
         currentMenuLabel  = noteManLabel;
         noteTabPane.visibleProperty().set(false);
         diaryTabPane.visibleProperty().set(false);
         toolsTabPane.visibleProperty().set(false);
         handleNoteManLabelClickedAction();
 
+
+    }
+
+    @FXML private MenuItem hideMainMenuItem;
+    @FXML private void handleHideMainMenu(){
+        String value;
+        if(hideMainMenu){
+            // 重新开启
+            hideMainMenuPane(false);
+            value = mainApp.languageConf.getFeild("hideMainMenuPane");
+        }else{
+            hideMainMenuPane(true);
+            value = mainApp.languageConf.getFeild("showMainMenuPane");
+        }
+        hideMainMenuItem.setText(value);
+    }
+
+    private void hideMainMenuPane(Boolean value){
+        hideMainMenu = value;
+        if(value){
+            mainMenuPane.setVisible(false);
+            mainMenuPane.setManaged(false);
+            mainGridPane.getChildren().remove(mainViewPane);
+            mainGridPane.add(mainViewPane,0,0,2,1);
+        }else{
+            mainMenuPane.setVisible(true);
+            mainMenuPane.setManaged(true);
+            mainGridPane.getChildren().remove(mainViewPane);
+            mainGridPane.add(mainViewPane,1,0,1,1);
+        }
     }
     /**
      * 响应点击笔记管理
