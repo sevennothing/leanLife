@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="600.0">
+         <top>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Recorder" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="10.0" />
+               </BorderPane.margin>
+            </Text>
+         </top>
+         <right>
+            <AnchorPane prefHeight="374.0" prefWidth="86.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox layoutX="7.0" layoutY="68.0" prefHeight="249.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                     <children>
+                        <Slider orientation="VERTICAL" prefHeight="248.0" prefWidth="47.0" />
+                        <Slider orientation="VERTICAL" />
+                        <Slider orientation="VERTICAL" />
+                     </children>
+                  </HBox>
+                  <Label layoutX="2.0" layoutY="28.0" text="音量" />
+                  <Label layoutX="36.0" layoutY="28.0" text="采样率" />
+               </children>
+            </AnchorPane>
+         </right>
+         <center>
+            <Canvas fx:id="centerCanvas" height="260.0" width="487.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </Canvas>
+         </center>
+         <bottom>
+            <HBox prefHeight="27.0" prefWidth="600.0" spacing="30.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="timecostLabel" text="00:00:00.000" />
+                  <Slider fx:id="timelineSlider" max="6000000.0" prefHeight="14.0" prefWidth="481.0" />
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

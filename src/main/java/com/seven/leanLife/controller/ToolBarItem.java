@@ -18,6 +18,7 @@ import javafx.scene.text.TextAlignment;
 
 /***
  * @// TODO: 2019/12/3  快捷键
+ * onAction 如何使用重写??
  */
 public class ToolBarItem  extends Pane {
     Image icon = null;
@@ -125,7 +126,6 @@ public class ToolBarItem  extends Pane {
     public final EventHandler<ActionEvent> getOnAction() { return onActionProperty().get(); }
     private ObjectProperty<EventHandler<ActionEvent>> onAction = new ObjectPropertyBase<EventHandler<ActionEvent>>() {
         @Override protected void invalidated() {
-            System.out.println("8888888888");
             setEventHandler(ActionEvent.ACTION, get());
         }
 

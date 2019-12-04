@@ -5,3 +5,15 @@
 .mainFxmlClass {
 
 }
+
+.color-rect{
+    -fx-border-color: black;
+    -fx-border-radius:2px;
+    -fx-background-color: red;
+    -fx-opacity:0.9;
+    -fx-effect: dropshadow(three-pass-box, #72b9da, 10.0,0, 0, 0);
+}
+
+.color-hbox {
+    -fx-spacing: 2;
+}

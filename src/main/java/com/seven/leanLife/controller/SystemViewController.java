@@ -66,9 +66,13 @@ public class SystemViewController {
     @FXML
     private ImageView clockToolImg;
     @FXML
+    private ImageView recorderToolImg;
+    @FXML
     private Tab clockTab;
     @FXML
     private TimeToolViewController timeToolController;
+    @FXML
+    private RecorderViewController recorderController;
 
     public SystemViewController(LeanLifeApp mainApp){
         setMainApp(mainApp);
@@ -140,11 +144,13 @@ public class SystemViewController {
      */
     @FXML
     private void handleToolsManLabelClickedAction(){
-        URL url = getClass().getClassLoader().getResource("img/tools/colors.jpg");
+        URL url = getClass().getClassLoader().getResource("img/tools/paint_palette.png");
         process_pre_menu_view(toolsManLabel, toolsTabPane);
         colorToolImg.setImage(new Image(url.toExternalForm()));
-        url = getClass().getClassLoader().getResource("img/tools/clock.jpg");
+        url = getClass().getClassLoader().getResource("img/tools/clock.png");
         clockToolImg.setImage(new Image(url.toExternalForm()));
+        url = getClass().getClassLoader().getResource("img/tools/recorder.png");
+        recorderToolImg.setImage(new Image(url.toExternalForm()));
     }
 
     private void openNewTabPane(TabPane tabPane, String fxmlName, Object controller, String tabName){
@@ -184,6 +190,17 @@ public class SystemViewController {
         SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
         selectionModel.select(clockTab);
         paintTimetoolToolbar();
+    }
+
+    /***
+     *  录音机功能入口
+     */
+    @FXML
+    private void handleRecorderToolClickedAction(){
+        mainApp.sysMw.publishMsg("Start the Recorder tool");
+        RecorderViewController controller = new RecorderViewController(mainApp);
+        openNewTabPane(toolsTabPane, "/fxml/RecorderView.fxml",controller,"录音机");
+        controller.voiceRecorderStart();
     }
 
     private void process_pre_menu_view(Label menuLabel, TabPane menuTab){

@@ -122,15 +122,23 @@
                                              <children>
                                                 <ImageView id="toolsCell" fx:id="colorToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleColorToolClickedAction" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                       <Image url="@/img/tools/colors.jpg" />
+                                                       <Image url="@/img/tools/paint_palette.png" />
                                                    </image>
                                                    <effect>
                                                       <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
                                                    </effect>
                                                 </ImageView>
                                                 <ImageView id="toolsCell" fx:id="clockToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleClockToolClickedAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                                    <image>
+                                                        <Image url="@/img/tools/clock.png" />
+                                                    </image>
+                                                    <effect>
+                                                        <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
+                                                    </effect>
+                                                </ImageView>
+                                                 <ImageView id="toolsCell" fx:id="recoderToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleRecorderToolClickedAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                                    <image>
-                                                      <Image url="@/img/tools/clock.jpg" />
+                                                      <Image url="@/img/tools/recorder.png" />
                                                    </image>
                                                    <effect>
                                                       <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
