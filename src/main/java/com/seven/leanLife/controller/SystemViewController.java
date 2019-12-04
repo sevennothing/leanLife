@@ -68,6 +68,8 @@ public class SystemViewController {
     @FXML
     private ImageView recorderToolImg;
     @FXML
+    private ImageView editorToolImg;
+    @FXML
     private Tab clockTab;
     @FXML
     private TimeToolViewController timeToolController;
@@ -151,6 +153,8 @@ public class SystemViewController {
         clockToolImg.setImage(new Image(url.toExternalForm()));
         url = getClass().getClassLoader().getResource("img/tools/recorder.png");
         recorderToolImg.setImage(new Image(url.toExternalForm()));
+        url = getClass().getClassLoader().getResource("img/tools/editor.png");
+        editorToolImg.setImage(new Image(url.toExternalForm()));
     }
 
     private void openNewTabPane(TabPane tabPane, String fxmlName, Object controller, String tabName){
@@ -202,6 +206,17 @@ public class SystemViewController {
         openNewTabPane(toolsTabPane, "/fxml/RecorderView.fxml",controller,"录音机");
         controller.voiceRecorderStart();
     }
+
+    /**
+     * 编辑器工具
+     */
+    @FXML
+    private void handleEditorToolClickedAction(){
+        mainApp.sysMw.publishMsg("Start the Editor tool");
+        EditorViewController controller = new EditorViewController(mainApp);
+        openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",controller,"编辑器");
+    }
+
 
     private void process_pre_menu_view(Label menuLabel, TabPane menuTab){
         currentMenuLabel.setStyle("-fx-background-color:cornsilk ;");

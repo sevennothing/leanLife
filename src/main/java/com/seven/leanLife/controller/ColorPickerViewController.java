@@ -12,25 +12,26 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
 import com.seven.leanLife.utils.MoreUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.Group;
 import javafx.stage.Stage;
 import org.w3c.dom.css.RGBColor;
 
@@ -76,6 +77,8 @@ public class ColorPickerViewController {
         colorToolVbox.getChildren().add(hbox);
         for(String key : colorCode.stringPropertyNames()){
 
+            StackPane csp = new StackPane();
+
             Rectangle rect = new Rectangle();
             rect.setHeight(38);
             rect.setWidth(38);
@@ -102,7 +105,20 @@ public class ColorPickerViewController {
                     }
                 }
             });
-            hbox.getChildren().add(rect);
+
+
+            Label label = new Label();
+            Tooltip tip = new Tooltip();
+            //tip.setContentDisplay();
+            tip.setText(key + "=" + colorCode.getProperty(key) + "\r\n" +"鼠标左键拷贝颜色代码,鼠标右键拷贝颜色名称");
+            tip.getStyleClass().add("color-rect-tip");
+            label.setText("");
+            label.setPrefSize(38,38);
+            label.setTooltip(tip);
+
+            csp.getChildren().addAll(rect, label);
+
+            hbox.getChildren().add(csp);
 
             colum ++;
             //mainApp.sysMw.publishMsg(key + "=" + colorCode.getProperty(key));

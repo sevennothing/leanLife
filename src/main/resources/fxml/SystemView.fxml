@@ -144,6 +144,14 @@
                                                       <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
                                                    </effect>
                                                 </ImageView>
+                                                 <ImageView id="toolsCell" fx:id="editorToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleEditorToolClickedAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                                                     <image>
+                                                         <Image url="@/img/tools/editor.png" />
+                                                     </image>
+                                                     <effect>
+                                                         <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
+                                                     </effect>
+                                                 </ImageView>
                                              </children>
                                           </GridPane>
                                        </content>

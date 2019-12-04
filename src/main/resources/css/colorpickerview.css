@@ -17,3 +17,8 @@
 .color-hbox {
     -fx-spacing: 2;
 }
+
+.color-rect-tip{
+    -fx-border-color:orange;
+    -fx-font-size:15px;
+}
