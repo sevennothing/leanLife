@@ -5,11 +5,14 @@
  */
 package com.seven.leanLife.utils;
 
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+
 /**
  *
  * @author Admin
  */
-public class moreUtils {
+public class MoreUtils {
     
 
     public static int alpha(int color) {
@@ -44,5 +47,12 @@ public class moreUtils {
         String blue = Integer.toString(blue(color));
         // System.out.println(Color.red(color));
         return "#" + red + green + blue;
+    }
+
+    public void setClipboard(String text){
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(text);
+        clipboard.setContent(content);
     }
 }

@@ -16,6 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.Stage;
 
 /**
@@ -25,49 +27,44 @@ import javafx.stage.Stage;
  */
 public class ColorPickerViewController {
     private LeanLifeApp mainApp;
-    
-    @FXML
-    protected TextField sysTextField;
 
-    @FXML
-    protected TextField rgbTextField;
+    /* 取色器标签 */
+    @FXML private Label colorPickerLabel;
 
+    /* 按钮:拷贝取色器获取的颜色代码 */
+    @FXML protected Button copyButton;
+
+    /* 颜色选择器 */
     @FXML
-    protected TextField argbTextField;
-    
-    @FXML
-    protected TextField rgbaTextField;
-    
-    @FXML
-    protected TextField hslTextField;
-    
-    @FXML
-    protected TextField hsvTextField;
-    
-    @FXML
-    protected Button sysCopyButton;
-    
-    @FXML
-    protected Button rgbCopyButton;
-    
-    @FXML
-    protected Button argbCopyButton;
-    
-    @FXML
-    protected Button rgbaCopyButton;
-    
-    @FXML
-    protected Button hslCopyButton;
-    
-    @FXML
-    protected Button hsvCopyButton;
-    
-    @FXML
-    protected ColorPicker colorSelectColorPicker;
+    protected ColorPicker selectColorPicker;
     
     @FXML
     private void initialize() {
+        String value;
+        /* 显示语言转换 */
+        value = mainApp.languageConf.getFeild("colorPicker");
+        colorPickerLabel.setText(value);
+
+        value = mainApp.languageConf.getFeild("copy");
+        copyButton.setText(value);
       
+    }
+
+    public ColorPickerViewController(LeanLifeApp mainApp){
+       setMainApp(mainApp);
+    }
+
+    @FXML
+    public void handleCopyColorPiker(){
+        //System.out.println("复制颜色值");
+        String  colorStr = selectColorPicker.getValue().toString();
+        //System.out.println("颜色值:"+ colorStr  );
+        mainApp.sysMw.publishMsg("copy color code:"+ colorStr  );
+
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(colorStr);
+        clipboard.setContent(content);
     }
     
     /**
@@ -76,5 +73,5 @@ public class ColorPickerViewController {
     public void setMainApp(LeanLifeApp mainApp) {
         this.mainApp = mainApp;
     }
-    
+
 }

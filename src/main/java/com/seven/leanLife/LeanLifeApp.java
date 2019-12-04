@@ -1,6 +1,7 @@
 package com.seven.leanLife;
 
 import com.seven.leanLife.controller.LoginViewController;
+import com.seven.leanLife.controller.MonitorWin;
 import com.seven.leanLife.controller.RegistViewController;
 import com.seven.leanLife.controller.SystemViewController;
 import com.seven.leanLife.model.User;
@@ -30,6 +31,8 @@ public class LeanLifeApp extends Application{
     private FXMLLoader fxmlLoader;
     private Stage stage;
     private Scene scene;
+    public MonitorWin sysMw;
+
     //标识当前用户
     private User user;
     public Properties dbConf;
@@ -41,6 +44,7 @@ public class LeanLifeApp extends Application{
 
     @Override
     public void init() throws Exception {
+        sysMw = new MonitorWin(); // 不真的打开监控串口
         springContext = SpringApplication.run(LeanLifeApp.class);
         fxmlLoader = new FXMLLoader();
         fxmlLoader.setControllerFactory(springContext::getBean);

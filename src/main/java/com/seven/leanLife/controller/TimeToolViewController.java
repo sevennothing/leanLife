@@ -9,7 +9,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.model.Monitor;
+import com.seven.leanLife.utils.MoreUtils;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -59,7 +61,7 @@ public class TimeToolViewController {
     @FXML
     private Label descLabel;
 
-    private MonitorWin sysMw;
+    private LeanLifeApp mainApp;
 
     private final String BeiJingTZ = "Asia/Shanghai";
     private final String ShangHaiTZ = "Asia/Shanghai";
@@ -67,6 +69,16 @@ public class TimeToolViewController {
     private final String LonDonTZ = "Europe/London";
     private final String AmericaTZ = "America/Dawson";
 
+    public TimeToolViewController(LeanLifeApp mainApp){
+        this.mainApp = mainApp;
+    }
+    public TimeToolViewController(){
+    }
+
+    public void setMainApp(LeanLifeApp mainApp){
+        System.out.println("Time tool set mainApp");
+        this.mainApp = mainApp;
+    }
 
     /**
      * Initializes the controller class.
@@ -153,10 +165,8 @@ public class TimeToolViewController {
     @FXML
     private void handleCopyCurrentTs(){
         String  currentTs = currentTimeStamp.getText();
-        Clipboard clipboard = Clipboard.getSystemClipboard();
-        final ClipboardContent content = new ClipboardContent();
-        content.putString(currentTs);
-        clipboard.setContent(content);
+        MoreUtils util = new MoreUtils();
+        util.setClipboard(currentTs);
     }
 
     @FXML
@@ -165,7 +175,7 @@ public class TimeToolViewController {
         String dateStr = assignDateText.getText();
         if(dateStr.length() < 1){
             //System.out.println("请输入正确内容");
-            sysMw.publishMsg("请输入正确的时间:yyyy-MM-dd HH:mm:ss\r\n");
+            mainApp.sysMw.publishMsg("请输入正确的时间:yyyy-MM-dd HH:mm:ss\r\n");
             return;
         }
         try {
@@ -173,7 +183,7 @@ public class TimeToolViewController {
             Long ts = date.getTime();
             dateToTsText.setText(ts.toString());
         } catch (ParseException e) {
-            sysMw.publishMsg(e.toString());
+            mainApp.sysMw.publishMsg(e.toString());
         }
     }
 
@@ -181,18 +191,17 @@ public class TimeToolViewController {
     private void handleTsToDate(){
         String tsStr = assignTsText.getText();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-        Long ts = Long.parseLong(tsStr);
-        if(tsStr.length() < 13) {
-            ts = ts * 1000;
+        try {
+            Long ts = Long.parseLong(tsStr);
+            if (tsStr.length() < 13) {
+                ts = ts * 1000;
+            }
+            Date date = new Date(ts);
+
+            tsToDateText.setText(df.format(date));
+        }catch (NumberFormatException e){
+            mainApp.sysMw.publishMsg(e.toString() + "\r\n");
         }
-        Date date= new Date(ts);
-
-        tsToDateText.setText(df.format(date));
-    }
-
-    public void setMw(MonitorWin mw){
-        this.sysMw = mw;
-        //mw.publishMsg("Time Tool opened");
     }
 
 }

@@ -8,31 +8,18 @@ package com.seven.leanLife.controller;
 import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.model.Monitor;
 import com.seven.leanLife.utils.EventProcess;
-import com.seven.leanLife.utils.moreUtils;
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
@@ -46,7 +33,6 @@ import org.springframework.stereotype.Controller;
 public class SystemViewController {
     private LeanLifeApp mainApp;
     private Label currentMenuLabel;
-    private MonitorWin sysMw = null;
     public static Monitor monitor = new Monitor();
     @FXML
     private Label nameLabel;
@@ -92,6 +78,7 @@ public class SystemViewController {
 
     @FXML
     private void initialize() {
+        mainApp.sysMw = new MonitorWin();
         hideMainMenu = false;
         currentMenuLabel  = noteManLabel;
         noteTabPane.visibleProperty().set(false);
@@ -160,63 +147,40 @@ public class SystemViewController {
         clockToolImg.setImage(new Image(url.toExternalForm()));
     }
 
+    private void openNewTabPane(TabPane tabPane, String fxmlName, Object controller, String tabName){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlName));
+        loader.setController(controller);
+        AnchorPane ap = null;
+        try {
+            ap = (AnchorPane)loader.load();
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        Tab newTab = new Tab();
+        newTab.setText(tabName);
+        newTab.setClosable(true);
+        newTab.setContent(ap);
+
+        tabPane.getTabs().add(newTab);
+
+        SingleSelectionModel selectionModel = tabPane.getSelectionModel();
+        selectionModel.select(newTab);
+
+    }
+
     @FXML
     /* 取色器功能 */
     private void handleColorToolClickedAction(){
-        System.out.println("准备启动颜色工具");
-
-        Tab colorTab = new Tab();
-        colorTab.setText("取色器");
-        colorTab.setClosable(true);
-        toolsTabPane.getTabs().add(colorTab);
-
-        Label colorLabel = new Label();
-        colorLabel.setText("取色器");
-
-        ColorPicker colorPicker  = new ColorPicker();
-        Button cpyBt = new Button();
-        cpyBt.setText("复制");
-
-
-        cpyBt.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                monitor.setMsg("复制颜色值");
-                //System.out.println("复制颜色值");
-                String  colorStr = colorPicker.getValue().toString();
-                //System.out.println("颜色值:"+ colorStr  );
-                //monitor.setMsg("颜色值:"+ colorStr  );
-                sysMw.publishMsg("颜色值:"+ colorStr  );
-
-                Clipboard clipboard = Clipboard.getSystemClipboard();
-                final ClipboardContent content = new ClipboardContent();
-                content.putString(colorStr);
-                clipboard.setContent(content);
-
-            }
-
-        });
-
-        HBox hbox = new HBox();
-        //hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(30);
-        hbox.getChildren().add(colorLabel);
-        hbox.getChildren().add(colorPicker);
-        hbox.getChildren().add(cpyBt);
-
-        VBox vbox = new VBox();
-        //vbox.setAlignment(Pos.CENTER);
-
-        vbox.getChildren().add(hbox);
-        colorTab.setContent(vbox);
-
-        SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
-        selectionModel.select(colorTab);
+        mainApp.sysMw.publishMsg("Start the color tool");
+        ColorPickerViewController cpvController = new ColorPickerViewController(mainApp);
+        openNewTabPane(toolsTabPane, "/fxml/ColorPickerView.fxml",cpvController,"取色工具");
     }
 
     @FXML
     /* 时间戳工具功能 */
     private void handleClockToolClickedAction(){
+        timeToolController.setMainApp(mainApp);
         SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
         selectionModel.select(clockTab);
         paintTimetoolToolbar();
@@ -250,20 +214,24 @@ public class SystemViewController {
 
     @FXML
     private void handleOpenMonitor(){
-        if(sysMw != null){
-            return;
+        if(mainApp.sysMw.isNone()){
+            // 打开
+            String value = mainApp.languageConf.getFeild("monitor.terminal");
+            mainApp.sysMw.openWindow(value);
+            //sysMw.publishMsg("您打开了一个监控窗口");
+            //sysMw.publishMsg("祝您使用愉快");
         }
-        sysMw = new MonitorWin();
-        //sysMw.publishMsg("您打开了一个监控窗口");
-        //sysMw.publishMsg("祝您使用愉快");
-        monitor.msgProperty().addListener(((observable, oldValue, newValue) -> sysMw.publishMsg(newValue)));
-        sysMw.isClosedProperty().addListener((observable, oldValue, newValue) -> monitorWindowClosed());
-        timeToolController.setMw(sysMw);
+        //monitor.msgProperty().addListener(((observable, oldValue, newValue) -> sysMw.publishMsg(newValue)));
+        //sysMw.isClosedProperty().addListener((observable, oldValue, newValue) -> monitorWindowClosed());
+        //timeToolController.setMw(sysMw);
     }
+
+    /*
     private void monitorWindowClosed(){
         System.out.println("监控串口被关闭");
-        sysMw = null;
+        mainApp.sysMw = null;
     }
+    */
 
     @FXML
     private void handleFullScreen(){
@@ -273,9 +241,9 @@ public class SystemViewController {
 
 
     /**
+     * 工具栏
      * tool-bar handle
      */
-    /* 工具栏 */
     @FXML
     private AnchorPane toolbarPane;
     private void paintDefaultToolbar(){
@@ -344,14 +312,6 @@ public class SystemViewController {
         //stage.setMaximized(true);
         //stage.setFullScreen(true);
         //nameLabel.setText(mainApp.getUser().getUserName());
-    }
-
-    /**
-     * 得到监控终端的引用
-     * @return 监控窗口节点
-     */
-    public MonitorWin getSysMw(){
-        return sysMw;
     }
 
 }

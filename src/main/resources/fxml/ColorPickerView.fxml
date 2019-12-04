@@ -18,9 +18,9 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="250.0" spacing="20.0">
                <children>
-                  <Label text="取色器" />
-                  <ColorPicker fx:id="colorSelectColorPicker" />
-                  <Button mnemonicParsing="false" text="复制" />
+                  <Label fx:id="colorPickerLabel" text="取色器" />
+                  <ColorPicker fx:id="selectColorPicker" />
+                  <Button fx:id="copyButton" mnemonicParsing="false" onAction="#handleCopyColorPiker" text="复制" />
                </children>
                <opaqueInsets>
                   <Insets />
