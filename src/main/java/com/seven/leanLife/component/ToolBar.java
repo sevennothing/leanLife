@@ -1,6 +1,5 @@
-package com.seven.leanLife.controller;
+package com.seven.leanLife.component;
 
-import javafx.collections.ObservableList;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 

@@ -1,7 +1,7 @@
 package com.seven.leanLife;
 
 import com.seven.leanLife.controller.LoginViewController;
-import com.seven.leanLife.controller.MonitorWin;
+import com.seven.leanLife.component.MonitorWin;
 import com.seven.leanLife.controller.RegistViewController;
 import com.seven.leanLife.controller.SystemViewController;
 import com.seven.leanLife.model.User;

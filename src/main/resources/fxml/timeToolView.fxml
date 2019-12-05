@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import com.seven.leanLife.controller.ClockPane?>
+<?import com.seven.leanLife.component.ClockPane?>
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seven.leanLife.controller.TimeToolViewController">
     <stylesheets>
         <URL value="@/css/timetoolview.css" />

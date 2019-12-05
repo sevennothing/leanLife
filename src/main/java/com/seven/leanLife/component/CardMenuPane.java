@@ -4,7 +4,7 @@
  *
  */
 
-package com.seven.leanLife.controller;
+package com.seven.leanLife.component;
 import java.util.*;
 
 import javafx.event.EventHandler;

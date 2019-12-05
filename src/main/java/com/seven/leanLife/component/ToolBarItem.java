@@ -1,8 +1,6 @@
-package com.seven.leanLife.controller;
+package com.seven.leanLife.component;
 
 import com.seven.leanLife.utils.EventProcess;
-import com.sun.javafx.scene.DirtyBits;
-import com.sun.javafx.tk.Toolkit;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

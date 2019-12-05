@@ -21,9 +21,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import com.seven.leanLife.controller.ToolBar?>
-<?import com.seven.leanLife.controller.ToolBarItem?>
-<?import com.seven.leanLife.controller.ClockPane?>
+<?import com.seven.leanLife.component.ToolBar?>
+<?import com.seven.leanLife.component.ToolBarItem?>
+<?import com.seven.leanLife.component.ClockPane?>
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@/css/systemview.css" />
@@ -136,7 +136,7 @@
                                                         <DropShadow height="66.96" radius="34.0925" spread="0.08" width="71.41" />
                                                     </effect>
                                                 </ImageView>
-                                                 <ImageView id="toolsCell" fx:id="recoderToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleRecorderToolClickedAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                                 <ImageView id="toolsCell" fx:id="recorderToolImg" fitHeight="78.0" fitWidth="81.0" onMouseClicked="#handleRecorderToolClickedAction" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                                    <image>
                                                       <Image url="@/img/tools/recorder.png" />
                                                    </image>

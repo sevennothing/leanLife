@@ -6,6 +6,9 @@
 package com.seven.leanLife.controller;
 
 import com.seven.leanLife.LeanLifeApp;
+import com.seven.leanLife.component.MonitorWin;
+import com.seven.leanLife.component.ToolBar;
+import com.seven.leanLife.component.ToolBarItem;
 import com.seven.leanLife.model.Monitor;
 import com.seven.leanLife.utils.EventProcess;
 
@@ -92,7 +95,6 @@ public class SystemViewController {
         toolsTabPane.visibleProperty().set(false);
         handleNoteManLabelClickedAction();
 
-
     }
 
     @FXML private MenuItem hideMainMenuItem;
@@ -141,20 +143,29 @@ public class SystemViewController {
         paintDefaultToolbar();
     }
 
+
+    /**
+     *  为ImageView节点添加图片
+      * @param node
+     * @param imgPath
+     */
+    private void setImageForImageView(ImageView node, String imgPath){
+        URL url = getClass().getClassLoader().getResource(imgPath);
+        if(url != null) {
+            node.setImage(new Image(url.toExternalForm()));
+        }
+    }
+
     /**
      * 响应点击工具管理
      */
     @FXML
     private void handleToolsManLabelClickedAction(){
-        URL url = getClass().getClassLoader().getResource("img/tools/paint_palette.png");
-        process_pre_menu_view(toolsManLabel, toolsTabPane);
-        colorToolImg.setImage(new Image(url.toExternalForm()));
-        url = getClass().getClassLoader().getResource("img/tools/clock.png");
-        clockToolImg.setImage(new Image(url.toExternalForm()));
-        url = getClass().getClassLoader().getResource("img/tools/recorder.png");
-        recorderToolImg.setImage(new Image(url.toExternalForm()));
-        url = getClass().getClassLoader().getResource("img/tools/editor.png");
-        editorToolImg.setImage(new Image(url.toExternalForm()));
+        setImageForImageView(colorToolImg, "img/tools/paint_palette.png");
+        setImageForImageView(clockToolImg, "img/tools/clock.png");
+        setImageForImageView(recorderToolImg, "img/tools/recorder.png");
+        setImageForImageView(editorToolImg, "img/tools/editor.png");
+        process_pre_menu_view(toolsManLabel,toolsTabPane);
     }
 
     private void openNewTabPane(TabPane tabPane, String fxmlName, Object controller, String tabName){
@@ -281,7 +292,7 @@ public class SystemViewController {
     private void paintDefaultToolbar(){
         toolbarPane.getChildren().clear();
 
-        ToolBar toolbar = new ToolBar();
+        com.seven.leanLife.component.ToolBar toolbar = new com.seven.leanLife.component.ToolBar();
 
         ToolBarItem saveI = new ToolBarItem();
 
@@ -318,7 +329,7 @@ public class SystemViewController {
     private void paintTimetoolToolbar(){
         String value;
         toolbarPane.getChildren().clear();
-        ToolBar toolbar = new ToolBar();
+        com.seven.leanLife.component.ToolBar toolbar = new ToolBar();
         ToolBarItem flushI = new ToolBarItem();
         value = mainApp.languageConf.getFeild("flush");
         flushI.setText(value);

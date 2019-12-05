@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" fx:id="rootAnchor" styleClass="root-container" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <BorderPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <right>
+                <VBox fx:id="rightTooglesBox" prefWidth="20.0">
+                    <ToggleButton onAction="#togglePreviewView" prefHeight="80" prefWidth="20" selected="true" styleClass="corner-toggle-button,corner-bottom-half">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="rightToggleGroup" />
+                        </toggleGroup>
+                        <graphic>
+                            <Group>
+                                <Label rotate="90" text="Preview" />
+                            </Group>
+                        </graphic>
+                        <padding>
+                            <Insets bottom="0" left="0" right="0" top="0" />
+                        </padding>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="toggleConfigButton" onAction="#toggleConfigurationView" prefHeight="80" prefWidth="20" styleClass="corner-toggle-button,corner-bottom-half" toggleGroup="$rightToggleGroup">
+                        <graphic>
+                            <Group>
+                                <Label rotate="90" text="Settings" />
+                            </Group>
+                        </graphic>
+                        <padding>
+                            <Insets bottom="0" left="0" right="0" top="0" />
+                        </padding>
+                    </ToggleButton>
+                </VBox>
+            </right>
+            <center>
+                <SplitPane id="mainVerticalSplitPane" fx:id="mainVerticalSplitPane" orientation="VERTICAL">
+                    <items>
+                        <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.5, 0.5">
+                            <items>
+                                <VBox minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <FlowPane hgap="5" vgap="5">
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                            </padding>
+                                        </FlowPane>
+
+                                        <StackPane VBox.vgrow="ALWAYS">
+                                            <children>
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                                                <Label fx:id="basicSearch" styleClass="basic-search" text="" StackPane.alignment="TOP_RIGHT">
+                                                    <graphic>
+                                                    </graphic>
+                                                    <StackPane.margin>
+                                                        <Insets left="5.0" right="10.0" />
+                                                    </StackPane.margin>
+                                                </Label>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </VBox>
+                                <SplitPane fx:id="editorSplitPane" orientation="VERTICAL">
+                                    <items>
+                                        <VBox minHeight="0" minWidth="0">
+                                            <children>
+                                                <TabPane fx:id="tabPane" minHeight="0" minWidth="0" styleClass="floating" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS" />
+                                            </children>
+                                        </VBox>
+                                    </items>
+                                </SplitPane>
+
+                                <VBox fx:id="previewBox" minWidth="0" styleClass="preview-box" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <HBox styleClass="menu-hbox, convert-box">
+                                            <children>
+                                                <FlowPane hgap="15" prefWidth="-1.0" vgap="5">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="indikator" managed="false" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" prefHeight="20.0" prefWidth="20.0" progress="-1.0" visible="false" />
+                                                        <Label fx:id="htmlPro" minWidth="-Infinity" styleClass="output-button,html" text="HTML">
+                                                            <graphic>
+                                                            </graphic>
+                                                        </Label>
+                                                        <Label fx:id="pdfPro" minWidth="-Infinity" styleClass="output-button,pdf" text="PDF">
+                                                            <graphic>
+                                                            </graphic>
+                                                        </Label>
+
+                                                        <Label fx:id="ebookPro" minWidth="-Infinity" styleClass="output-button,ebook" text="Ebook">
+                                                            <graphic>
+                                                            </graphic>
+                                                        </Label>
+
+                                                        <Label fx:id="docbookPro" minWidth="-Infinity" styleClass="output-button,docbook" text="Docbook">
+                                                            <graphic>
+                                                            </graphic>
+                                                        </Label>
+
+                                                        <!--<Label fx:id="odfPro" minWidth="-Infinity" styleClass="docbook"-->
+                                                        <!--text="Odt"/>-->
+
+                                                    </children>
+                                                </FlowPane>
+
+                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="1.0" HBox.hgrow="ALWAYS">
+                                                    <HBox.margin>
+                                                        <Insets />
+                                                    </HBox.margin>
+                                                </Pane>
+
+                                                <Label fx:id="browserPro" alignment="TOP_RIGHT" minWidth="-Infinity" styleClass="output-button,browser" text="Browser" textAlignment="LEFT">
+                                                    <graphic>
+                                                    </graphic>
+                                                </Label>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                                            </padding>
+                                        </HBox>
+                                        <ProgressBar fx:id="progressBar" managed="false" visible="false" />
+                                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                                    </children>
+                                </VBox>
+                            </items>
+                        </SplitPane>
+                    </items>
+                </SplitPane>
+            </center>
+            <top>
+            </top>
+        </BorderPane>
+    </children>
+</AnchorPane>

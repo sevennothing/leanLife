@@ -1,4 +1,4 @@
-package com.seven.leanLife.controller;
+package com.seven.leanLife.component;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
