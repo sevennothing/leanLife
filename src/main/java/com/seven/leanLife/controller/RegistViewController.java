@@ -23,14 +23,14 @@ import org.springframework.stereotype.Controller;
  * @title: RegistViewController.java
  * @package application.regist
  * @description: (注册视图控制器)
- * @author 夏靖雯
- * @date 2018年12月19日 下午8:00:45
+ * @author caijun.Li
+ * @date 2019/10/06
  * @version V1.0
  */
 
 @Controller
 public class RegistViewController {
-	private LeanLifeApp mainApp;
+	private ApplicationController parentController;
 
 	//返回到登录界面
 	@FXML
@@ -95,30 +95,30 @@ public class RegistViewController {
 	 */
 	public void langFlush(){
 		String value;
-		value = mainApp.languageConf.getFeild("username");
+		value = parentController.languageConf.getFeild("username");
 		usernameLabel.setText(value);
-		value = mainApp.languageConf.getFeild("password");
+		value = parentController.languageConf.getFeild("password");
 		passwordLabel.setText(value);
 
-		value = mainApp.languageConf.getFeild("secret.answer");
+		value = parentController.languageConf.getFeild("secret.answer");
 		secretAnswerLabel.setText(value);
 
-		value = mainApp.languageConf.getFeild("verificationCode");
+		value = parentController.languageConf.getFeild("verificationCode");
 		verificationCodeLabel.setText(value);
 
-		value = mainApp.languageConf.getFeild("secret.question");
+		value = parentController.languageConf.getFeild("secret.question");
 		secretQuestionLabel.setText(value);
 
-		value = mainApp.languageConf.getFeild("verificationCode.answer");
+		value = parentController.languageConf.getFeild("verificationCode.answer");
 		verificationCodeAnswerLabel.setText(value);
 
-		value = mainApp.languageConf.getFeild("reg.username.prompt");
+		value = parentController.languageConf.getFeild("reg.username.prompt");
 		userNameField.setPromptText(value);
 
-		value = mainApp.languageConf.getFeild("reg.password.prompt");
+		value = parentController.languageConf.getFeild("reg.password.prompt");
 		passwordField.setPromptText(value);
 
-		value = mainApp.languageConf.getFeild("reg.secret.answer.prompt");
+		value = parentController.languageConf.getFeild("reg.secret.answer.prompt");
 		secretAnswerField.setPromptText(value);
 	}
 
@@ -168,11 +168,11 @@ public class RegistViewController {
 							if(isGoToSystemView) {
 								//设置当用户
 								User user = new User(userName, password, index, secretAnswer);
-								mainApp.setUser(user);
+								parentController.setUser(user);
 
-								mainApp.showSystemView();
+								parentController.showSystemView();
 							}else {
-								mainApp.showLoginView();
+								parentController.showLoginView();
 							}
 						}else {
 							DialogTool.errorDialog("注册失败", "请重新注册");
@@ -193,7 +193,7 @@ public class RegistViewController {
 
 	@FXML
 	private void HandleBackToLoginAction() {
-		mainApp.showLoginView();
+		parentController.showLoginView();
 	}
 
 	/**
@@ -243,8 +243,8 @@ public class RegistViewController {
 	/**
 	 *	设置对MainApp的引用
 	 */
-	public void setMainApp(LeanLifeApp mainApp) {
-		this.mainApp = mainApp;
+	public void setMainController(ApplicationController controller) {
+		this.parentController = controller;
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class RegistViewController {
 	 */
 	public boolean addUser(String name, String password, int secQueIndex, String answer) {
 		String sql = "insert into user(name, password, secretQuestion, secretAnswer) values(?,?,?,?)";
-		if(JDBCTool.executeInsertDeleteUpdate(mainApp.dbConf, sql, name,password,secQueIndex,answer)) {
+		if(JDBCTool.executeInsertDeleteUpdate(parentController.dbConf, sql, name,password,secQueIndex,answer)) {
 			return true;
 		}else {
 			return false;

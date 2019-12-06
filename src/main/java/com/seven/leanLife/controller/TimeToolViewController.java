@@ -57,7 +57,7 @@ public class TimeToolViewController {
     @FXML
     private Label descLabel;
 
-    private LeanLifeApp mainApp;
+    private ApplicationController parentController;
 
     private final String BeiJingTZ = "Asia/Shanghai";
     private final String ShangHaiTZ = "Asia/Shanghai";
@@ -65,15 +65,15 @@ public class TimeToolViewController {
     private final String LonDonTZ = "Europe/London";
     private final String AmericaTZ = "America/Dawson";
 
-    public TimeToolViewController(LeanLifeApp mainApp){
-        this.mainApp = mainApp;
+    public TimeToolViewController(ApplicationController controller){
+        this.parentController = controller;
     }
     public TimeToolViewController(){
     }
 
-    public void setMainApp(LeanLifeApp mainApp){
-        System.out.println("Time tool set mainApp");
-        this.mainApp = mainApp;
+    public void setApplicationController(ApplicationController controller){
+        System.out.println("Time tool set parentController");
+        this.parentController = controller;
     }
 
     /**
@@ -171,7 +171,7 @@ public class TimeToolViewController {
         String dateStr = assignDateText.getText();
         if(dateStr.length() < 1){
             //System.out.println("请输入正确内容");
-            mainApp.sysMw.publishMsg("请输入正确的时间:yyyy-MM-dd HH:mm:ss\r\n");
+            parentController.sysMw.publishMsg("请输入正确的时间:yyyy-MM-dd HH:mm:ss\r\n");
             return;
         }
         try {
@@ -179,7 +179,7 @@ public class TimeToolViewController {
             Long ts = date.getTime();
             dateToTsText.setText(ts.toString());
         } catch (ParseException e) {
-            mainApp.sysMw.publishMsg(e.toString());
+            parentController.sysMw.publishMsg(e.toString());
         }
     }
 
@@ -196,7 +196,9 @@ public class TimeToolViewController {
 
             tsToDateText.setText(df.format(date));
         }catch (NumberFormatException e){
-            mainApp.sysMw.publishMsg(e.toString() + "\r\n");
+            parentController.sysMw.publishMsg(e.toString() + "\r\n");
+        }finally {
+
         }
     }
 

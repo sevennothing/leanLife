@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 
 public class RecorderViewController {
-    private LeanLifeApp mainApp;
+    private ApplicationController parentController;
     private AudioFormat audioFormat;
     private TargetDataLine targetDataLine;
 
@@ -23,8 +23,8 @@ public class RecorderViewController {
     @FXML private Slider timelineSlider;
 
 
-    public RecorderViewController(LeanLifeApp mainApp){
-        this.mainApp = mainApp;
+    public RecorderViewController(ApplicationController controller){
+        this.parentController = controller;
     }
 
     @FXML
@@ -51,7 +51,7 @@ public class RecorderViewController {
     }
 
     public void voiceRecorderStart(){
-        mainApp.sysMw.publishMsg("Start Recorder");
+        parentController.sysMw.publishMsg("Start Recorder");
         try {
             // 构造具有线性 PCM 编码和给定参数的 AudioFormat。
             audioFormat = getAudioFormat();

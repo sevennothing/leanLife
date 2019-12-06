@@ -23,7 +23,7 @@ public class MonitorWin extends Pane{
     private Boolean noneWin;
 
     /**
-     *  不带参数的构建，不正的打开监控串口
+     *  不带参数的构建，不真的打开监控串口
      */
     public MonitorWin(){
         noneWin = true;

@@ -9,7 +9,9 @@ import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.component.MonitorWin;
 import com.seven.leanLife.component.ToolBar;
 import com.seven.leanLife.component.ToolBarItem;
+import com.seven.leanLife.config.ConfigurationService;
 import com.seven.leanLife.model.Monitor;
+import com.seven.leanLife.service.ThreadService;
 import com.seven.leanLife.utils.EventProcess;
 
 import java.io.IOException;
@@ -26,6 +28,7 @@ import javafx.scene.layout.GridPane;
 
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -34,7 +37,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class SystemViewController {
-    private LeanLifeApp mainApp;
+    private ApplicationController parentController;
     private Label currentMenuLabel;
     public static Monitor monitor = new Monitor();
     @FXML
@@ -79,15 +82,23 @@ public class SystemViewController {
     @FXML
     private RecorderViewController recorderController;
 
-    public SystemViewController(LeanLifeApp mainApp){
-        setMainApp(mainApp);
+    public SystemViewController(ApplicationController controller){
+        parentController = controller;
+        //Stage stage = parentController.getStage();
+        //stage.setMaximized(true);
+        //stage.setFullScreen(true);
+        //nameLabel.setText(parentController.getUser().getUserName());
     }
 
     private Boolean hideMainMenu;
+    @Autowired
+    private ThreadService threadService;
+    @Autowired
+    private ConfigurationService configurationService;
 
     @FXML
     private void initialize() {
-        mainApp.sysMw = new MonitorWin();
+        parentController.sysMw = new MonitorWin();
         hideMainMenu = false;
         currentMenuLabel  = noteManLabel;
         noteTabPane.visibleProperty().set(false);
@@ -103,10 +114,10 @@ public class SystemViewController {
         if(hideMainMenu){
             // 重新开启
             hideMainMenuPane(false);
-            value = mainApp.languageConf.getFeild("hideMainMenuPane");
+            value = parentController.languageConf.getFeild("hideMainMenuPane");
         }else{
             hideMainMenuPane(true);
-            value = mainApp.languageConf.getFeild("showMainMenuPane");
+            value = parentController.languageConf.getFeild("showMainMenuPane");
         }
         hideMainMenuItem.setText(value);
     }
@@ -193,15 +204,15 @@ public class SystemViewController {
     @FXML
     /* 取色器功能 */
     private void handleColorToolClickedAction(){
-        mainApp.sysMw.publishMsg("Start the color tool");
-        ColorPickerViewController cpvController = new ColorPickerViewController(mainApp);
+        parentController.sysMw.publishMsg("Start the color tool");
+        ColorPickerViewController cpvController = new ColorPickerViewController(parentController);
         openNewTabPane(toolsTabPane, "/fxml/ColorPickerView.fxml",cpvController,"取色工具");
     }
 
     @FXML
     /* 时间戳工具功能 */
     private void handleClockToolClickedAction(){
-        timeToolController.setMainApp(mainApp);
+        timeToolController.setApplicationController(parentController);
         SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
         selectionModel.select(clockTab);
         paintTimetoolToolbar();
@@ -212,8 +223,8 @@ public class SystemViewController {
      */
     @FXML
     private void handleRecorderToolClickedAction(){
-        mainApp.sysMw.publishMsg("Start the Recorder tool");
-        RecorderViewController controller = new RecorderViewController(mainApp);
+        parentController.sysMw.publishMsg("Start the Recorder tool");
+        RecorderViewController controller = new RecorderViewController(parentController);
         openNewTabPane(toolsTabPane, "/fxml/RecorderView.fxml",controller,"录音机");
         controller.voiceRecorderStart();
     }
@@ -223,8 +234,8 @@ public class SystemViewController {
      */
     @FXML
     private void handleEditorToolClickedAction(){
-        mainApp.sysMw.publishMsg("Start the Editor tool");
-        EditorViewController controller = new EditorViewController(mainApp);
+        parentController.sysMw.publishMsg("Start the Editor tool");
+        EditorViewController controller = new EditorViewController(parentController);
         openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",controller,"编辑器");
     }
 
@@ -251,16 +262,16 @@ public class SystemViewController {
      */
     @FXML
     private void handleLogoutLabelClickedAction() {
-        mainApp.showLoginView();
-        mainApp.setUser(null);
+        parentController.showLoginView();
+        parentController.setUser(null);
     }
 
     @FXML
     private void handleOpenMonitor(){
-        if(mainApp.sysMw.isNone()){
+        if(parentController.sysMw.isNone()){
             // 打开
-            String value = mainApp.languageConf.getFeild("monitor.terminal");
-            mainApp.sysMw.openWindow(value);
+            String value = parentController.languageConf.getFeild("monitor.terminal");
+            parentController.sysMw.openWindow(value);
             //sysMw.publishMsg("您打开了一个监控窗口");
             //sysMw.publishMsg("祝您使用愉快");
         }
@@ -272,13 +283,13 @@ public class SystemViewController {
     /*
     private void monitorWindowClosed(){
         System.out.println("监控串口被关闭");
-        mainApp.sysMw = null;
+        parentController.sysMw = null;
     }
     */
 
     @FXML
     private void handleFullScreen(){
-        Stage stage = mainApp.getStage();
+        Stage stage = parentController.getStage();
         stage.setFullScreen(true);
     }
 
@@ -296,7 +307,7 @@ public class SystemViewController {
 
         ToolBarItem saveI = new ToolBarItem();
 
-        String value = mainApp.languageConf.getFeild("save");
+        String value = parentController.languageConf.getFeild("save");
         saveI.setText(value);
 
         URL url = getClass().getClassLoader().getResource("img/tools/save.png");
@@ -319,7 +330,7 @@ public class SystemViewController {
         ToolBarItem cancelI = new ToolBarItem();
         url = getClass().getClassLoader().getResource("img/tools/cancel.png");
         cancelI.setImage(new Image(url.toExternalForm()));
-        value = mainApp.languageConf.getFeild("cancel");
+        value = parentController.languageConf.getFeild("cancel");
         cancelI.setText(value);
         toolbar.addItem(cancelI);
 
@@ -331,10 +342,10 @@ public class SystemViewController {
         toolbarPane.getChildren().clear();
         com.seven.leanLife.component.ToolBar toolbar = new ToolBar();
         ToolBarItem flushI = new ToolBarItem();
-        value = mainApp.languageConf.getFeild("flush");
+        value = parentController.languageConf.getFeild("flush");
         flushI.setText(value);
         ToolBarItem consoleWinI = new ToolBarItem();
-        value = mainApp.languageConf.getFeild("monitor.terminal");
+        value = parentController.languageConf.getFeild("monitor.terminal");
         consoleWinI.setText(value);
         toolbar.addItem(flushI);
         toolbar.addItem(consoleWinI);
@@ -346,15 +357,6 @@ public class SystemViewController {
     private void handleSave(){
         System.out.println("响应保存");
     }
-    /**
-     *	得到主控制器的引用
-     */
-    public void setMainApp(LeanLifeApp mainApp) {
-        this.mainApp = mainApp;
-        //Stage stage = mainApp.getStage();
-        //stage.setMaximized(true);
-        //stage.setFullScreen(true);
-        //nameLabel.setText(mainApp.getUser().getUserName());
-    }
+
 
 }

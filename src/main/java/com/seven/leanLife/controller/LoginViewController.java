@@ -10,15 +10,12 @@ import com.seven.leanLife.model.User;
 import com.seven.leanLife.utils.CheckValidTool;
 import com.seven.leanLife.utils.JDBCTool;
 import com.seven.leanLife.utils.DialogTool;
-import com.seven.leanLife.utils.DebugConfig;
+import com.seven.leanLife.config.DebugConfig;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ResourceBundle;
+
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,7 +23,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 
 /**
  * FXML Controller class
@@ -35,7 +31,7 @@ import org.springframework.util.ResourceUtils;
  */
 @Controller
 public class LoginViewController{
-    private LeanLifeApp mainApp;
+    private ApplicationController parentController;
     @FXML
     private Label systemName;
     @FXML
@@ -58,8 +54,8 @@ public class LoginViewController{
     /**
      * 获取主控制器的引用
      */
-    public void setMainApp(LeanLifeApp mainApp) {
-        this.mainApp = mainApp;
+    public void setMainController(ApplicationController controller) {
+        this.parentController = controller;
     }
 
     /**
@@ -85,16 +81,16 @@ public class LoginViewController{
     public void langFlush(){
         /* 语言调整 */
         String value;
-        value = mainApp.languageConf.getFeild("systemName");
+        value = parentController.languageConf.getFeild("systemName");
         systemName.setText(value);
-        value = mainApp.languageConf.getFeild("login");
+        value = parentController.languageConf.getFeild("login");
         loginButton.setText(value);
-        value = mainApp.languageConf.getFeild("regist");
+        value = parentController.languageConf.getFeild("regist");
         registButton.setText(value);
 
-        value = mainApp.languageConf.getFeild("username.prompt");
+        value = parentController.languageConf.getFeild("username.prompt");
         userNameField.setPromptText(value);
-        value = mainApp.languageConf.getFeild("password.prompt");
+        value = parentController.languageConf.getFeild("password.prompt");
         passwordField.setPromptText(value);
     }
 
@@ -103,7 +99,7 @@ public class LoginViewController{
      */
     @FXML
     private void handleRegistButtonAction() {
-        mainApp.showRegistView();
+        parentController.showRegistView();
     }
 
     /**
@@ -116,18 +112,18 @@ public class LoginViewController{
 
         if(DebugConfig.IGNORE_LOGIN_AUTH){
             /* Debug Only*/
-            mainApp.showSystemView();
+            parentController.showSystemView();
             return;
         }
         if(CheckValidTool.isValidUserName(userName) && CheckValidTool.isValidPassword(password)) {
             String sql = "select * from user where name=? and password=?";
-            User user= JDBCTool.getUser(mainApp.dbConf, sql, userName, password);
+            User user= JDBCTool.getUser(parentController.dbConf, sql, userName, password);
             if(user != null) {
                 //设置当前用户
-                mainApp.setUser(user);
+                parentController.setUser(user);
                 DialogTool.informationDialog("登录成功", "即将进入主界面");
                 //显示主界面
-                mainApp.showSystemView();
+                parentController.showSystemView();
             }else {
                 errorInfoLabel.setText("用户名或密码不正确");
                 userNameField.clear();
@@ -135,7 +131,7 @@ public class LoginViewController{
                 //登录失败做出渐变渐显的效果
                 FadeTransition ft = new FadeTransition();
                 ft.setDuration(Duration.seconds(0.1));
-                ft.setNode(mainApp.getScene().getRoot());
+                ft.setNode(parentController.getScene().getRoot());
                 ft.setFromValue(0);
                 ft.setToValue(1);
                 ft.play();
@@ -146,7 +142,7 @@ public class LoginViewController{
             passwordField.clear();
             FadeTransition ft = new FadeTransition();
             ft.setDuration(Duration.seconds(0.1));
-            ft.setNode(mainApp.getScene().getRoot());
+            ft.setNode(parentController.getScene().getRoot());
             ft.setFromValue(0);
             ft.setToValue(1);
             ft.play();

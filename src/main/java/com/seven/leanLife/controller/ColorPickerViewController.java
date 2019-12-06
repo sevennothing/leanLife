@@ -41,7 +41,7 @@ import org.w3c.dom.css.RGBColor;
  * @author Admin
  */
 public class ColorPickerViewController {
-    private LeanLifeApp mainApp;
+    private ApplicationController parentController;
 
     /* 取色器标签 */
     @FXML private Label colorPickerLabel;
@@ -66,7 +66,7 @@ public class ColorPickerViewController {
             colorCode.load(in);
             in.close();
         }catch(IOException e) {
-            mainApp.sysMw.publishMsg(e.toString());
+            parentController.sysMw.publishMsg(e.toString());
         }
 
         /* 加载 CSS 颜色定义 */
@@ -121,7 +121,7 @@ public class ColorPickerViewController {
             hbox.getChildren().add(csp);
 
             colum ++;
-            //mainApp.sysMw.publishMsg(key + "=" + colorCode.getProperty(key));
+            //parentController.sysMw.publishMsg(key + "=" + colorCode.getProperty(key));
             if((colum % maxItemPerRow) == 0){
                 hbox = new HBox();
                 hbox.getStyleClass().add("color-hbox");
@@ -130,16 +130,16 @@ public class ColorPickerViewController {
         }
 
         /* 显示语言转换 */
-        value = mainApp.languageConf.getFeild("colorPicker");
+        value = parentController.languageConf.getFeild("colorPicker");
         colorPickerLabel.setText(value);
 
-        value = mainApp.languageConf.getFeild("copy");
+        value = parentController.languageConf.getFeild("copy");
         copyButton.setText(value);
       
     }
 
-    public ColorPickerViewController(LeanLifeApp mainApp){
-       setMainApp(mainApp);
+    public ColorPickerViewController(ApplicationController controller){
+        this.parentController = controller;
     }
 
     @FXML
@@ -147,19 +147,12 @@ public class ColorPickerViewController {
         //System.out.println("复制颜色值");
         String  colorStr = selectColorPicker.getValue().toString();
         //System.out.println("颜色值:"+ colorStr  );
-        mainApp.sysMw.publishMsg("copy color code:"+ colorStr  );
+        parentController.sysMw.publishMsg("copy color code:"+ colorStr  );
 
         Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
         content.putString(colorStr);
         clipboard.setContent(content);
-    }
-    
-    /**
-     *	得到主控制器的引用
-     */
-    public void setMainApp(LeanLifeApp mainApp) {
-        this.mainApp = mainApp;
     }
 
 }

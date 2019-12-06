@@ -1,177 +1,130 @@
 package com.seven.leanLife;
 
-import com.seven.leanLife.controller.LoginViewController;
-import com.seven.leanLife.component.MonitorWin;
-import com.seven.leanLife.controller.RegistViewController;
-import com.seven.leanLife.controller.SystemViewController;
-import com.seven.leanLife.model.User;
-import com.seven.leanLife.utils.LangConfig;
+import com.seven.leanLife.config.ConfigurationService;
+import com.seven.leanLife.controller.ApplicationController;
+import com.seven.leanLife.service.ThreadService;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.scene.image.Image;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Properties;
 
+/**
+ *  尝试网上解决spring boot 启动缓慢的问题，
+ *  发现使用@Configuration 和 @EnableAutoConfiguration
+ *  代替@SpringBootApplication;
+ *  -- 无效
+ */
+//@Configuration
+//@EnableAutoConfiguration
 @SpringBootApplication
 public class LeanLifeApp extends Application{
-    private ConfigurableApplicationContext springContext;
-    public LangConfig languageConf;
-    private Parent rootNode;
-    private FXMLLoader fxmlLoader;
+    private static Logger logger = LoggerFactory.getLogger(LeanLifeApp.class);
+    private static ApplicationController controller;
+    private static ConfigurableApplicationContext context;
     private Stage stage;
-    private Scene scene;
-    public MonitorWin sysMw;
 
-    //标识当前用户
-    private User user;
-    public Properties dbConf;
+    private ConfigurationService configurationService;
+    private ThreadService threadService;
 
-    public static void main(String[] args) {
-        //SpringApplication.run(LeanLifeApp.class, args);
-        launch(args);
-    }
-
-    @Override
-    public void init() throws Exception {
-        sysMw = new MonitorWin(); // 不真的打开监控串口
-        springContext = SpringApplication.run(LeanLifeApp.class);
-        fxmlLoader = new FXMLLoader();
-        fxmlLoader.setControllerFactory(springContext::getBean);
-        //System.out.println("加载语言配置");
-        languageConf = new LangConfig();
-        // 加载数据库配置文件
-        dbConf = new Properties();
-        try {
-            InputStream in = this.getClass().getResourceAsStream("/config/db.properties");
-            dbConf.load(in);
-            in.close();
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public void start(Stage primaryStage) throws Exception{
-        stage  = primaryStage;
-        showLoginView();
-        primaryStage.show();
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> logger.error(e.getMessage(), e));
+        loadRequiredFonts();
+
+        // 启动线程
+        new Thread(() -> {
+            try {
+                startApp(primaryStage);
+            } catch (final Throwable e) {
+                logger.error("Problem occured while starting LeanLife System", e);
+            }
+        }).start();
+
+    }
+
+    private void loadRequiredFonts() {
+        //Note: 在这里加载字体
         /*
-        fxmlLoader.setLocation(getClass().getResource("/fxml/LoginView.fxml"));
-        rootNode = fxmlLoader.load();
-        primaryStage.setTitle("Hello World");
-        Scene scene = new Scene(rootNode, 800, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        Font.loadFont(LeanLifeApp.class.getResourceAsStream("/font/NotoSerif-Regular.ttf"), -1);
+        Font.loadFont(LeanLifeApp.class.getResourceAsStream("/font/NotoSerif-Italic.ttf"), -1);
+        Font.loadFont(LeanLifeApp.class.getResourceAsStream("/font/NotoSerif-Bold.ttf"), -1);
+        Font.loadFont(LeanLifeApp.class.getResourceAsStream("/font/NotoSerif-BoldItalic.ttf"), -1);
+        Font.loadFont(LeanLifeApp.class.getResourceAsStream("/font/DejaVuSansMono.ttf"), -1);
+        Font.loadFont(LeanLifeApp.class.getResourceAsStream("/font/DejaVuSansMono-Bold.ttf"), -1);
+        Font.loadFont(LeanLifeApp.class.getResourceAsStream("/font/DejaVuSansMono-Oblique.ttf"), -1);
         */
     }
 
-    @Override
-    public void stop() {
-        springContext.stop();
+    private void startApp(final Stage primaryStage) throws Throwable {
+        this.stage  = primaryStage;
+        context = SpringApplication.run(SpringAppConfig.class);
+        System.out.println("start Service");
+
+        controller = context.getBean(ApplicationController.class);
+        threadService = context.getBean(ThreadService.class);
+
+        // 加载配置服务
+        configurationService = context.getBean(ConfigurationService.class);
+        configurationService.loadConfigurations();
+
+
+        final FXMLLoader parentLoader = new FXMLLoader();
+        parentLoader.setControllerFactory(context::getBean);
+
+        controller.initializeApp();
+
+        // 提前设置，防止闪屏
+        controller.setStage(stage);
+
+        stage.setOnShowing(e -> {
+            configurationService.loadConfigurations();
+        });
+        stage.setOnShown(e -> {
+            controller.bindConfigurations();
+        });
+
+        threadService.runActionLater(() -> {
+            //setMaximized();
+            controller.showLoginView();
+            stage.show();
+        });
+
+        final ThreadService threadService = context.getBean(ThreadService.class);
+        threadService.start(() -> {
+            try {
+                logger.info("thread Service start");
+            } catch (Exception e) {
+                logger.error("Problem occured in startup listener", e);
+            }
+        });
+        /*
+        scene.getWindow().setOnCloseRequest(controller::closeAllTabs);
+        stage.widthProperty().addListener(controller::stageWidthChanged);
+        stage.heightProperty().addListener(controller::stageWidthChanged);
+        */
+
     }
 
-    /**
-     *	显示登录界面
-     */
-    public void showLoginView() {
-        try {
-            URL url = getClass().getClassLoader().getResource("img/guide/login.png");
-            stage.setTitle("Login");
-            stage.getIcons().add(new Image(url.toExternalForm()));
-            LoginViewController lgController = (LoginViewController)replaceSceneContent("/fxml/LoginView.fxml");
-            lgController.setMainApp(this);
-            lgController.langFlush();
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
+    /*
+    private void setMaximized() {
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
     }
-
-    /**
-     *	显示注册界面
-     */
-    public void showRegistView() {
-        try {
-            stage.setTitle("Regist");
-            stage.getIcons().add(new Image("file:/img/guide/regist.png"));
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(LeanLifeApp.class.getResource("/fxml/RegistView.fxml"));
-            BorderPane bp = (BorderPane)loader.load();
-            scene = new Scene(bp);
-            stage.setScene(scene);
-            stage.setResizable(false);
-
-            RegistViewController regController = (RegistViewController)loader.getController();
-            System.out.println(regController);
-            regController.setMainApp(this);
-            regController.langFlush();
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     *	显示系统主界面
-     *  为了方便处理多语言，不在fxml中指定控制器；
-     *  new 控制器时将mainApp传递进去
-     */
-    public void showSystemView() {
-        try {
-            stage.setTitle("LeanLifeSystem");
-            stage.getIcons().add(new Image("file:/img/home.png"));
-            //stage.setMaximized(true);
-            //stage.setFullScreen(true);
-
-            SystemViewController svController = new SystemViewController(this);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SystemView.fxml"));
-            loader.setController(svController);
-            replaceSceneContent(loader);
-
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+    */
 
 
-    private void replaceSceneContent(FXMLLoader loader){
-        AnchorPane ap = null;
-        try {
-            ap = (AnchorPane)loader.load();
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
 
-        scene = new Scene(ap);
-        stage.setScene(scene);
-        stage.setResizable(false);
-    }
-
-    /**
-     *	显示指定的视图
-     */
-    private Object replaceSceneContent(String fxmlFile) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource(fxmlFile));
-        replaceSceneContent(loader);
-
-        return loader.getController();
-    }
-
-    /**
-     *	获取scene
-     */
-    public Scene getScene() {
-        return scene;
-    }
 
     /**
      *	获取Stage
@@ -180,13 +133,6 @@ public class LeanLifeApp extends Application{
         return stage;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     /*
     @Bean
@@ -199,4 +145,26 @@ public class LeanLifeApp extends Application{
         };
     }
     */
+
+    @Override
+    public void stop() {
+        //springContext.stop();
+
+        context.registerShutdownHook();
+        Platform.exit();
+        System.exit(0);
+    }
+
+    /**
+     * The main() method is ignored in correctly deployed JavaFX application.
+     * main() serves only as fallback in case the application can not be
+     * launched through deployment artifacts, e.g., in IDEs with limited FX
+     * support. NetBeans ignores main().
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
 }

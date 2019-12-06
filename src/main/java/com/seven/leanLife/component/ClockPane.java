@@ -5,7 +5,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.layout.*;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ClockPane extends Pane{
 	private int hour;
 	private int minute;

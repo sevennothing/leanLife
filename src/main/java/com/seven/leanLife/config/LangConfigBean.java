@@ -1,15 +1,15 @@
-package com.seven.leanLife.utils;
+package com.seven.leanLife.config;
 
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class LangConfig {
+public class LangConfigBean {
     private Properties properties;
     private String lang = "english";
 
-    public LangConfig(){
+    public LangConfigBean(){
         properties = new Properties();
         try {
             InputStream in = this.getClass().getResourceAsStream("/config/application.properties");
@@ -30,6 +30,10 @@ public class LangConfig {
         }catch(IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void load(){
+
     }
 
     public String getFeild(String name) {

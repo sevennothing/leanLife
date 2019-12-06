@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.apache" level="ERROR"/>
+    <logger name="org.xnio" level="ERROR"/>
+    <logger name="io.undertow" level="ERROR"/>
+    <logger name="de.tototec" level="ERROR"/>
+    <logger name="org.hibernate" level="ERROR"/>
+    <logger name="org.jboss" level="ERROR"/>
+    <logger name="com.dooapp" level="ERROR"/>
+
+    <logger name="com.seven" level="INFO"/>
+
+    <property resource="config/application.properties"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${HOME:-${USERPROFILE}}/${application.config.folder}/log/leanlife.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>leanLife.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 3 days' worth of history -->
+            <maxHistory>3</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+
+</configuration>
