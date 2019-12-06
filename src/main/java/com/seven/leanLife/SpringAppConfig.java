@@ -4,6 +4,7 @@ import com.seven.leanLife.config.ConfigurationService;
 import com.seven.leanLife.config.SpellcheckConfigBean;
 import com.seven.leanLife.controller.ApplicationController;
 import com.seven.leanLife.service.ThreadService;
+import com.seven.leanLife.service.extension.AsciiTreeGenerator;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -33,7 +34,7 @@ import java.util.Base64;
 @EnableWebSocket
 // 组件扫描启动太慢
 //@ComponentScan(basePackages = "com.seven.leanLife.**")
-//@EnableAutoConfiguration
+@EnableAutoConfiguration
 @Import({
         //DelegatingWebSocketConfiguration.class,
         DispatcherServletAutoConfiguration.class,
@@ -77,6 +78,12 @@ public class SpringAppConfig extends SpringBootServletInitializer implements Web
     public ThreadService threadService(){
         ThreadService threadService = new ThreadService();
         return threadService;
+    }
+    @Bean
+    @Lazy
+    public AsciiTreeGenerator asciiTreeGenerator(){
+        AsciiTreeGenerator asciiTreeGenerator = new AsciiTreeGenerator();
+        return asciiTreeGenerator;
     }
 
     @Bean

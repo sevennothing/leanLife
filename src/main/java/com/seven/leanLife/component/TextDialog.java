@@ -3,6 +3,7 @@ package com.seven.leanLife.component;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Tooltip;
 
+
 /**
  * Created by Hakan on 4/1/2015.
  */

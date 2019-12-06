@@ -52,7 +52,7 @@ public class ConfigurationService {
         //langConfigBean.load();
 
         List<ConfigurationBase> configBeanList = Arrays.asList(
-//                ,spellcheckConfigBean
+                spellcheckConfigBean
         );
 
         ScrollPane formsPane = new ScrollPane();

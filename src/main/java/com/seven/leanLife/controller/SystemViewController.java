@@ -10,8 +10,10 @@ import com.seven.leanLife.component.MonitorWin;
 import com.seven.leanLife.component.ToolBar;
 import com.seven.leanLife.component.ToolBarItem;
 import com.seven.leanLife.config.ConfigurationService;
+import com.seven.leanLife.config.SpellcheckConfigBean;
 import com.seven.leanLife.model.Monitor;
 import com.seven.leanLife.service.ThreadService;
+import com.seven.leanLife.service.extension.AsciiTreeGenerator;
 import com.seven.leanLife.utils.EventProcess;
 
 import java.io.IOException;
@@ -27,6 +29,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import javafx.stage.Stage;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -81,20 +84,33 @@ public class SystemViewController {
     private TimeToolViewController timeToolController;
     @FXML
     private RecorderViewController recorderController;
+    private Boolean hideMainMenu;
+    @Autowired
+    private ThreadService threadService;
+    @Autowired
+    private AsciiTreeGenerator asciiTreeGenerator;
+    @Autowired
+    private SpellcheckConfigBean spellcheckConfigBean;
+    @Autowired
+    private ConfigurationService configurationService;
 
-    public SystemViewController(ApplicationController controller){
-        parentController = controller;
+
+    public SystemViewController(ApplicationController controller,
+                                ThreadService threadService,
+                                SpellcheckConfigBean spellcheckConfigBean,
+                                AsciiTreeGenerator asciiTreeGenerator
+                                ){
+        this.parentController = controller;
+        this.threadService = threadService;
+        this.spellcheckConfigBean = spellcheckConfigBean;
+        this.asciiTreeGenerator = asciiTreeGenerator;
+
         //Stage stage = parentController.getStage();
         //stage.setMaximized(true);
         //stage.setFullScreen(true);
         //nameLabel.setText(parentController.getUser().getUserName());
     }
 
-    private Boolean hideMainMenu;
-    @Autowired
-    private ThreadService threadService;
-    @Autowired
-    private ConfigurationService configurationService;
 
     @FXML
     private void initialize() {
@@ -235,8 +251,12 @@ public class SystemViewController {
     @FXML
     private void handleEditorToolClickedAction(){
         parentController.sysMw.publishMsg("Start the Editor tool");
-        EditorViewController controller = new EditorViewController(parentController);
+        EditorViewController controller = new EditorViewController(parentController,threadService,asciiTreeGenerator,
+                spellcheckConfigBean);
+
         openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",controller,"编辑器");
+
+        controller.load();
     }
 
 

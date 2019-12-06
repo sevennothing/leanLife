@@ -63,7 +63,7 @@
 
                                         <StackPane VBox.vgrow="ALWAYS">
                                             <children>
-                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="leftEditPane" prefHeight="200.0" prefWidth="200.0" />
                                                 <Label fx:id="basicSearch" styleClass="basic-search" text="" StackPane.alignment="TOP_RIGHT">
                                                     <graphic>
                                                     </graphic>

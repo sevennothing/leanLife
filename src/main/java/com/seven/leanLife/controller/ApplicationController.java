@@ -4,7 +4,10 @@ package com.seven.leanLife.controller;
 import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.component.MonitorWin;
 import com.seven.leanLife.config.LangConfigBean;
+import com.seven.leanLife.config.SpellcheckConfigBean;
 import com.seven.leanLife.model.User;
+import com.seven.leanLife.service.ThreadService;
+import com.seven.leanLife.service.extension.AsciiTreeGenerator;
 import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +20,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
@@ -56,6 +60,13 @@ public class ApplicationController extends TextWebSocketHandler implements Initi
     //标识当前用户
     private User user;
     public Properties dbConf;
+
+    @Autowired
+    private SpellcheckConfigBean spellcheckConfigBean;
+    @Autowired
+    private ThreadService threadService;
+    @Autowired
+    private AsciiTreeGenerator asciiTreeGenerator;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -214,7 +225,8 @@ public class ApplicationController extends TextWebSocketHandler implements Initi
             //stage.setMaximized(true);
             //stage.setFullScreen(true);
 
-            SystemViewController svController = new SystemViewController(this);
+            SystemViewController svController = new SystemViewController(this,
+                    threadService,spellcheckConfigBean,asciiTreeGenerator);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SystemView.fxml"));
             loader.setController(svController);
             replaceSceneContent(loader);
