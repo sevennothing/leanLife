@@ -1,8 +1,6 @@
 package com.seven.leanLife.config;
 
-import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.controller.ApplicationController;
-import com.seven.leanLife.controller.EditorViewController;
 import com.seven.leanLife.helper.IOHelper;
 import com.seven.leanLife.service.ThreadService;
 import javafx.beans.property.BooleanProperty;

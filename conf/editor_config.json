@@ -1,0 +1,10 @@
+
+{
+    "fontFamily":"'Consolas'",
+    "fontSize":16,
+    "scrollSpeed":0.1,
+    "useWrapMode":true,
+    "wrapLimit":0,
+    "showGutter":true,
+    "editorTheme":"Default"
+}

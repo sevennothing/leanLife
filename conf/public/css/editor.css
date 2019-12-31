@@ -1,0 +1,40 @@
+/*
+styles = []
+for (var i = 1; i < 16; i++) {
+    styles.push(".ace_br" + i + "{" + (
+        ["top-left", "top-right", "bottom-right", "bottom-left"]
+    ).map(function(x, j) {
+        return i & (1<<j) ? "border-" + x + "-radius: 3px;" : ""
+    }).filter(Boolean).join(" ") + "}")
+}
+styles.join("\n")
+*/
+body {
+    overflow: hidden;
+}
+
+#editor {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+.ace_marker-layer .misspelled-strong, .misspelled-strong {
+    position: absolute;
+    z-index: -2;
+    border-bottom: 1px dashed #e3727e;
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.ace_marker-layer .misspelled, .misspelled {
+    position: absolute;
+    z-index: -2;
+    border-bottom: 1px dashed #cccccc;
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}

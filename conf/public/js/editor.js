@@ -25,12 +25,12 @@ var refreshTimeout;
 var updateDelay = 100;
 
 //var maxTop = editor.renderer.layerConfig.maxHeight - editor.renderer.$size.scrollerHeight + editor.renderer.scrollMargin.bottom;
-//afx.onscroll(editor.getSession().getScrollTop(), maxTop);
+//editorTab.onscroll(editor.getSession().getScrollTop(), maxTop);
 
 
 function updateHtmlScroll() {
     var row = editor.renderer.getFirstFullyVisibleRow();
-    afx.scrollByLine(row + "");
+    editorTab.scrollByLine(row + "");
 }
 
 function updateMarkupScroll(row) {
@@ -38,7 +38,7 @@ function updateMarkupScroll(row) {
     if (lastEditorRow == row)
         return;
 
-    afx.scrollByLine(row + "");
+    editorTab.scrollByLine(row + "");
 
     lastEditorRow = row;
 };
@@ -49,7 +49,7 @@ editor.getSession().on('changeScrollTop', function (scroll) {
     var scrollTop = editor.getSession().getScrollTop();
 
     if (Math.abs(maxTop - scrollTop) < 10 || scrollTop < 10) {
-        afx.onscroll(scrollTop, maxTop);
+        editorTab.onscroll(scrollTop, maxTop);
         return;
     }
 
@@ -85,7 +85,7 @@ function updateStatusBox() {
         var lineCount = editor.session.getLength();
         var wordCount = editor.session.getValue().length;
 
-        afx.updateStatusBox(row, column, lineCount, wordCount);
+        leanlife.updateStatusBox(row, column, lineCount, wordCount);
     }, 1000);
 
 }
@@ -110,7 +110,7 @@ var editorChangeListener = function (obj) {
         editorPane.appendWildcard();
 
     renderAction.buff(function () {
-        afx.textListener(editor.getValue(), editorMode());
+        leanlife.textListener(editor.getValue(), editorMode());
     }, 100);
 
     checkSpelling();
@@ -132,7 +132,7 @@ function checkSpelling() {
 
     clearTypoMarkers();
     spellcheckAction.buff(function () {
-        afx.processTokens();
+        leanlife.processTokens();
     }, 1000);
 }
 
@@ -161,15 +161,19 @@ function getTokenList() {
 }
 
 function updateOptions() {
-    var editorConfigBean = afx.getEditorConfigBean();
+    var editorConfigBean = leanlife.getEditorConfigBean();
     editor.setOptions({
         fontFamily: editorConfigBean.getFontFamily(),
         fontSize: editorConfigBean.getFontSize()
     });
+
+    //TODO: 程序挂掉，待解决
+    /*
     var themes = editorConfigBean.getAceTheme();
     if (themes.size() > 0) {
         changeTheme(themes.get(0));
     }
+    */
 
     changeScrollSpeed(editorConfigBean.getScrollSpeed());
     setShowGutter(editorConfigBean.getShowGutter());
@@ -259,7 +263,7 @@ function initializeEmmet(mode) {
 
     ace.require("ace/ext/emmet");
 
-    ["/afx/resource/js/?p=js/emmet.js", "/afx/resource/ace/src/?p=ace/src/ext-emmet.js"].forEach(function (path, index) {
+    ["/lean-life/resource/js/?p=js/emmet.js", "/lean-life/resource/ace/src/?p=ace/src/ext-emmet.js"].forEach(function (path, index) {
         var script = document.createElement("script");
         script.src = path;
         document.querySelector("body").appendChild(script);
@@ -276,7 +280,7 @@ function initializeEmmet(mode) {
 var rerenderAction = new BufferedAction();
 function rerender() {
     rerenderAction.buff(function () {
-        afx.textListener(editor.getValue(), editorMode());
+        leanlife.textListener(editor.getValue(), editorMode());
         updateStatusBox();
     }, 100);
     checkSpelling();
@@ -313,7 +317,7 @@ function checkWordSuggestions() {
     }
     var selectedText = editor.getSelectedText();
     if (selectedText && "" != selectedText.trim()) {
-        afx.checkWordSuggestions(selectedText);
+        leanlife.checkWordSuggestions(selectedText);
     }
 
     if (selectionIsEmpty) {

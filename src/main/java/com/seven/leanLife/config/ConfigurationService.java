@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 public class ConfigurationService {
     //private final LocationConfigBean locationConfigBean;
-    //private final EditorConfigBean editorConfigBean;
+    private final EditorConfigBean editorConfigBean;
     //private final PreviewConfigBean previewConfigBean;
     //private final HtmlConfigBean htmlConfigBean;
     //private final DocbookConfigBean docbookConfigBean;
@@ -39,15 +39,18 @@ public class ConfigurationService {
     @Autowired
     public ConfigurationService(ApplicationController controller,
                                 ThreadService threadService,
+                                EditorConfigBean editorConfigBean,
                                 SpellcheckConfigBean spellcheckConfigBean
                                 ) {
         this.controller = controller;
         this.threadService = threadService;
         this.spellcheckConfigBean = spellcheckConfigBean;
+        this.editorConfigBean = editorConfigBean;
         //this.langConfigBean = langConfigBean;
     }
 
     public void loadConfigurations(Runnable... runnables) {
+        editorConfigBean.load();
         spellcheckConfigBean.load();
         //langConfigBean.load();
 

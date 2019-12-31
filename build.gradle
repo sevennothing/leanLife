@@ -7,7 +7,7 @@ buildscript {
         //mavenCentral()
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.2.RELEASE"
     }
 }
 
@@ -20,6 +20,7 @@ group 'com.seven.leanLife'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 13
+//sourceCompatibility = 1.8
 
 
 allprojects {
@@ -39,15 +40,18 @@ dependencies {
     compile("org.jooq:joox:1.6.0")
     compile("org.apache.xmlgraphics:fop:2.3")
     compile("org.apache.xmlgraphics:batik-codec:1.10")
-    //compile("org.kordamp.ikonli:ikonli-core")
-    //compile("org.kordamp.ikonli:ikonli-javafx")
-    //compile("org.kordamp.ikonli:ikonli-fontawesome-pack")
+    compile("org.kordamp.ikonli:ikonli-core:11.3.4")
+    compile("org.kordamp.ikonli:ikonli-javafx:11.3.4")
+    compile("org.kordamp.ikonli:ikonli-fontawesome-pack:11.3.4")
     compile("org.glassfish:javax.json:1.1.4")
 
-    compile("org.openjfx:javafx-controls:12")
-    compile("org.openjfx:javafx-web:12")
-    compile("org.openjfx:javafx-fxml:12")
-    compile("org.openjfx:javafx-swing:12")
+    compile("com.dooapp.fxform2:core:9.0.0")
+
+    compile("org.openjfx:javafx-controls:13.0.1")
+    compile("org.openjfx:javafx-base:13.0.1")
+    compile("org.openjfx:javafx-web:13.0.1")
+    compile("org.openjfx:javafx-fxml:13.0.1")
+    compile("org.openjfx:javafx-swing:13.0.1")
 
     compile fileTree(dir: 'lib', includes: ['*.jar'])
 

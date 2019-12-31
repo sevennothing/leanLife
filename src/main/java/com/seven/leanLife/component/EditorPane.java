@@ -1,11 +1,15 @@
 package com.seven.leanLife.component;
 
 import com.seven.leanLife.config.SpellcheckConfigBean;
-import com.seven.leanLife.controller.EditorViewController;
+import com.seven.leanLife.config.EditorConfigBean;
+import com.seven.leanLife.controller.EditorController;
 import com.seven.leanLife.helper.IOHelper;
 import com.seven.leanLife.keyboard.KeyHelper;
 import com.seven.leanLife.service.ThreadService;
 import com.seven.leanLife.service.extension.AsciiTreeGenerator;
+import com.seven.leanLife.service.ui.EditorTabService;
+import com.seven.leanLife.service.shortcut.ShortcutProvider;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -37,14 +41,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 
 /**
 
@@ -59,9 +61,10 @@ public class EditorPane extends AnchorPane {
     private final Logger logger = LoggerFactory.getLogger(EditorPane.class);
     private final ApplicationContext applicationContext;
     private final ThreadService threadService;
-    private final EditorViewController controller;
-    //private final EditorConfigBean editorConfigBean;
-    //private final ShortcutProvider shortcutProvider;
+    private final EditorController controller;
+    private final EditorTabService editorTabService;
+    private final EditorConfigBean editorConfigBean;
+    private final ShortcutProvider shortcutProvider;
     //private final TabService tabService;
     private final AsciiTreeGenerator asciiTreeGenerator;
     //private final ParserService parserService;
@@ -94,10 +97,11 @@ public class EditorPane extends AnchorPane {
     //private MyTab myTab;
 
     @Autowired
-    public EditorPane(EditorViewController controller,
-                      //EditorConfigBean editorConfigBean,
+    public EditorPane(EditorController controller,
+                      EditorTabService editorTabService,
+                      EditorConfigBean editorConfigBean,
                       ThreadService threadService,
-                      //ShortcutProvider shortcutProvider,
+                      ShortcutProvider shortcutProvider,
                       ApplicationContext applicationContext,
                       //TabService tabService,
                       AsciiTreeGenerator asciiTreeGenerator,
@@ -107,9 +111,10 @@ public class EditorPane extends AnchorPane {
                       ) {
         this.setVisible(true);
         this.controller = controller;
-        //this.editorConfigBean = editorConfigBean;
+        this.editorTabService = editorTabService;
+        this.editorConfigBean = editorConfigBean;
         this.threadService = threadService;
-        //this.shortcutProvider = shortcutProvider;
+        this.shortcutProvider = shortcutProvider;
         this.applicationContext = applicationContext;
         //this.tabService = tabService;
         this.asciiTreeGenerator = asciiTreeGenerator;
@@ -124,8 +129,6 @@ public class EditorPane extends AnchorPane {
         initializeMargins();
         initializeEditorContextMenus();
 
-        ///TODO 不明白怎么调用
-        afterEditorLoaded();
     }
 
     private Boolean handleConfirm(String param) {
@@ -136,8 +139,9 @@ public class EditorPane extends AnchorPane {
     }
 
     private void afterEditorLoaded() {
-        getWindow().setMember("afx", controller);
+        getWindow().setMember("leanlife", controller);
         getWindow().setMember("editorPane", this);
+        getWindow().setMember("editorTab", editorTabService);
         updateOptions();
 
         if (Objects.nonNull(path)) {
@@ -166,6 +170,7 @@ public class EditorPane extends AnchorPane {
 
         this.getChildren().add(webView);
         webView.requestFocus();
+
     }
 
     private void afterEditorReady(ObservableValue observable, boolean oldValue, boolean newValue) {
@@ -198,17 +203,19 @@ public class EditorPane extends AnchorPane {
             return;
         }
 
-        /*
         threadService.runActionLater(() -> {
             if (is("asciidoc") || is("markdown")) {
                 applicationContext.getBean(HtmlPane.class)
                         .load(String.format(previewUrl, controller.getPort(), lastInterPath = interPath));
             } else if (is("html")) {
+                System.out.println("TODO::::::::");
+                /*
                 applicationContext.getBean(LiveReloadPane.class)
                         .load(String.format(liveUrl, controller.getPort(), lastInterPath = interPath));
+                        */
             }
         }, true);
-        */
+
     }
 
     private void updateOptions() {
@@ -237,6 +244,10 @@ public class EditorPane extends AnchorPane {
     }
 
     public void load(String url) {
+
+        StackTraceElement ste = new Throwable().getStackTrace()[1];
+        System.out.println(ste.getFileName() + ":Line " + ste.getLineNumber() + ";load URL=" + url);
+
         if (Objects.nonNull(url))
             threadService.runActionLater(() -> {
                 webEngine().load(url);
@@ -277,6 +288,7 @@ public class EditorPane extends AnchorPane {
 
     public void setEditorValue(String value) {
         threadService.runActionLater(() -> {
+            logger.debug("do setEditorValue():" + value);
             getWindow().setMember("editorValue", value);
             webEngine().executeScript("setEditorValue(editorValue)");
             getWebView().requestFocus();
@@ -284,7 +296,7 @@ public class EditorPane extends AnchorPane {
         });
     }
 
-    //@WebkitCall(from = "editor")
+    @WebkitCall(from = "editor")
     public void onThemeLoaded() {
         if (!isVisible()) {
             setVisible(true);
@@ -301,6 +313,7 @@ public class EditorPane extends AnchorPane {
 
     public void rerender(Object... args) {
         try {
+            System.out.println("=== editorPane rerender()");
             webEngine().executeScript("rerender()");
         } catch (Exception e) {
             // no-op
@@ -311,8 +324,9 @@ public class EditorPane extends AnchorPane {
         webView.requestFocus();
     }
 
-    /*
     public void moveCursorTo(Integer lineno) {
+        System.out.println("TODO: moveCursorTo");
+        /*
         if (Objects.nonNull(lineno)) {
             final Optional<ViewPanel> viewPanelOptional = controller.getRightShowerHider().getShowing();
             viewPanelOptional.ifPresent(ViewPanel::disableScrollingAndJumping);
@@ -324,8 +338,8 @@ public class EditorPane extends AnchorPane {
             }
             viewPanelOptional.ifPresent(ViewPanel::enableScrollingAndJumping);
         }
+        */
     }
-    */
 
     public void changeEditorMode() {
         if (Objects.nonNull(path)) {
@@ -406,33 +420,34 @@ public class EditorPane extends AnchorPane {
         return (String) webEngine().executeScript("editor.session.getTextRange(editor.getSelectionRange())");
     }
 
+    // 右键菜单
     public void initializeEditorContextMenus() {
         webView.setContextMenuEnabled(false);
         contextMenu = new ContextMenu();
 
         MenuItem cut = MenuItemBuilt.item("Cut").click(e -> {
-            controller.cutCopy(editorSelection());
+            editorTabService.cutCopy(editorSelection());
             execCommand("cut");
         });
 
         MenuItem copy = MenuItemBuilt.item("Copy").click(e -> {
-            controller.cutCopy(editorSelection());
+            editorTabService.cutCopy(editorSelection());
         });
 
         MenuItem pasteConverted = MenuItemBuilt.item("Paste converted").click(e -> {
-            controller.paste();
+            editorTabService.paste();
         });
 
         MenuItem paste = MenuItemBuilt.item("Paste").click(e -> {
-            controller.pasteRaw();
+            editorTabService.pasteRaw();
         });
 
         MenuItem indexSelection = MenuItemBuilt.item("Index selection").click(e -> {
-            //shortcutProvider.getProvider().addIndexSelection();
+            shortcutProvider.getProvider().addIndexSelection();
         });
 
         MenuItem includeAsSubDocument = MenuItemBuilt.item("Include selection").click(e -> {
-            //shortcutProvider.getProvider().includeAsSubdocument();
+            shortcutProvider.getProvider().includeAsSubdocument();
         });
 
         MenuItem replacements = MenuItemBuilt.item("Apply Replacements").click(this::replaceSubs);
@@ -663,7 +678,7 @@ public class EditorPane extends AnchorPane {
         });
     }
 
-    //@WebkitCall(from = "editor")
+    @WebkitCall(from = "editor")
     public void appendWildcard() {
         threadService.runActionLater(() -> {
             setChangedProperty(true);
@@ -786,6 +801,7 @@ public class EditorPane extends AnchorPane {
     }
 */
     public void updateCursorCoordinates() {
+        System.out.println("updateCursorCoordinates()");
         if (ready.get()) {
             JSObject coordinates = (JSObject) this.call("getCursorCoordinates");
             this.pageX = (Number) coordinates.getMember("pageX");

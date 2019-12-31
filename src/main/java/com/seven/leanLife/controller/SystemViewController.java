@@ -5,15 +5,19 @@
  */
 package com.seven.leanLife.controller;
 
-import com.seven.leanLife.LeanLifeApp;
+import com.seven.leanLife.component.BasicTab;
 import com.seven.leanLife.component.MonitorWin;
 import com.seven.leanLife.component.ToolBar;
 import com.seven.leanLife.component.ToolBarItem;
 import com.seven.leanLife.config.ConfigurationService;
+import com.seven.leanLife.config.EditorConfigBean;
 import com.seven.leanLife.config.SpellcheckConfigBean;
 import com.seven.leanLife.model.Monitor;
 import com.seven.leanLife.service.ThreadService;
 import com.seven.leanLife.service.extension.AsciiTreeGenerator;
+import com.seven.leanLife.service.shortcut.ShortcutProvider;
+import com.seven.leanLife.service.ui.EditorService;
+import com.seven.leanLife.service.ui.EditorTabService;
 import com.seven.leanLife.utils.EventProcess;
 
 import java.io.IOException;
@@ -29,7 +33,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import javafx.stage.Stage;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -88,22 +91,39 @@ public class SystemViewController {
     @Autowired
     private ThreadService threadService;
     @Autowired
+    private EditorService editorService;
+    @Autowired
+    private EditorTabService editorTabService;
+    @Autowired
     private AsciiTreeGenerator asciiTreeGenerator;
     @Autowired
     private SpellcheckConfigBean spellcheckConfigBean;
     @Autowired
     private ConfigurationService configurationService;
+    @Autowired
+    private EditorConfigBean editorConfigBean;
+    @Autowired
+    private ShortcutProvider shortcutProvider;
 
 
+    @Autowired
     public SystemViewController(ApplicationController controller,
                                 ThreadService threadService,
+                                EditorService editorService,
+                                EditorTabService editorTabService,
                                 SpellcheckConfigBean spellcheckConfigBean,
+                                EditorConfigBean editorConfigBean,
+                                ShortcutProvider shortcutProvider,
                                 AsciiTreeGenerator asciiTreeGenerator
                                 ){
         this.parentController = controller;
         this.threadService = threadService;
+        this.editorService = editorService;
+        this.editorTabService = editorTabService;
         this.spellcheckConfigBean = spellcheckConfigBean;
         this.asciiTreeGenerator = asciiTreeGenerator;
+        this.editorConfigBean = editorConfigBean;
+        this.shortcutProvider = shortcutProvider;
 
         //Stage stage = parentController.getStage();
         //stage.setMaximized(true);
@@ -195,7 +215,7 @@ public class SystemViewController {
         process_pre_menu_view(toolsManLabel,toolsTabPane);
     }
 
-    private void openNewTabPane(TabPane tabPane, String fxmlName, Object controller, String tabName){
+    private BasicTab openNewTabPane(TabPane tabPane, String fxmlName, Object controller, String tabName){
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlName));
         loader.setController(controller);
         AnchorPane ap = null;
@@ -205,16 +225,13 @@ public class SystemViewController {
             e.printStackTrace();
         }
 
-        Tab newTab = new Tab();
-        newTab.setText(tabName);
-        newTab.setClosable(true);
-        newTab.setContent(ap);
-
-        tabPane.getTabs().add(newTab);
-
-        SingleSelectionModel selectionModel = tabPane.getSelectionModel();
-        selectionModel.select(newTab);
-
+        BasicTab tab = new BasicTab(parentController);
+        tab.setTabText(tabName);
+        tab.setContent(ap);
+        tabPane.getTabs().add(tab);
+        tab.select();
+        tab.enableMenu();
+        return tab;
     }
 
     @FXML
@@ -251,12 +268,20 @@ public class SystemViewController {
     @FXML
     private void handleEditorToolClickedAction(){
         parentController.sysMw.publishMsg("Start the Editor tool");
-        EditorViewController controller = new EditorViewController(parentController,threadService,asciiTreeGenerator,
+        /*
+        EditorController controller = new EditorController(parentController,
+                threadService,
+                editorTabService,
+                editorConfigBean,
+                shortcutProvider,
+                asciiTreeGenerator,
                 spellcheckConfigBean);
 
-        openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",controller,"编辑器");
+        */
+        BasicTab tab = openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",parentController.editorController,"编辑器");
 
-        controller.load();
+        // 在新建的tab上加载编辑器
+        parentController.editorController.loadEditPane(tab);
     }
 
 

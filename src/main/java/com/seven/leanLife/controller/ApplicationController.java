@@ -1,13 +1,28 @@
 package com.seven.leanLife.controller;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.component.MonitorWin;
+import com.seven.leanLife.component.WebkitCall;
+import com.seven.leanLife.config.EditorConfigBean;
 import com.seven.leanLife.config.LangConfigBean;
+import com.seven.leanLife.config.PreviewConfigBean;
 import com.seven.leanLife.config.SpellcheckConfigBean;
+import com.seven.leanLife.engine.AsciidocConverterProvider;
+import com.seven.leanLife.engine.AsciidocWebkitConverter;
+import com.seven.leanLife.helper.IOHelper;
 import com.seven.leanLife.model.User;
 import com.seven.leanLife.service.ThreadService;
 import com.seven.leanLife.service.extension.AsciiTreeGenerator;
+import com.seven.leanLife.service.shortcut.ShortcutProvider;
+import com.seven.leanLife.service.ui.EditorService;
+import com.seven.leanLife.service.ui.EditorTabService;
+import com.seven.leanLife.utils.ConverterResult;
+import com.seven.leanLife.utils.DocumentMode;
+
+import com.seven.leanLife.utils.Tuple;
 import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,13 +33,22 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
+import javafx.event.Event;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,12 +58,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.*;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Component
-public class ApplicationController extends TextWebSocketHandler implements Initializable {
+public class ApplicationController {
     private Logger logger = LoggerFactory.getLogger(ApplicationController.class);
     private Path configPath;
     private Path installationPath;
@@ -53,24 +84,37 @@ public class ApplicationController extends TextWebSocketHandler implements Initi
 
     private Stage stage;
     private Scene scene;
-    private List<WebSocketSession> sessionList = new ArrayList<>();
-
-    private HostServices hostServices;
 
     //标识当前用户
     private User user;
     public Properties dbConf;
 
     @Autowired
+    public EditorController editorController;
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
     private SpellcheckConfigBean spellcheckConfigBean;
     @Autowired
     private ThreadService threadService;
+
+
+    @Autowired
+    private EditorService editorService;
+    @Autowired
+    private EditorTabService editorTabService;
+    @Autowired
+    private ShortcutProvider shortcutProvider;
+
     @Autowired
     private AsciiTreeGenerator asciiTreeGenerator;
+    @Autowired
+    private EditorConfigBean editorConfigBean;
+    @Autowired
+    public AsciidocWebkitConverter asciidocWebkitConverter;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    }
 
     public void initializeApp(){
         sysMw = new MonitorWin(); // 不真的打开监控串口
@@ -85,18 +129,10 @@ public class ApplicationController extends TextWebSocketHandler implements Initi
         }catch(IOException e) {
             e.printStackTrace();
         }
+
+        editorController.initializeEditorController(Integer.parseInt(environment.getProperty("local.server.port")));
     }
 
-    private Stage[] getAllStages() {
-        return new Stage[]{
-                /*
-                        stage,
-                        detachStage,
-                        asciidocTableStage,
-                        markdownTableStage
-                */
-                };
-    }
 
     public void bindConfigurations() {
 
@@ -142,11 +178,6 @@ public class ApplicationController extends TextWebSocketHandler implements Initi
         return logPath;
     }
 
-    @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        sessionList.add(session);
-    }
-
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -188,7 +219,6 @@ public class ApplicationController extends TextWebSocketHandler implements Initi
         }
     }
 
-
     /**
      *	显示注册界面
      */
@@ -226,7 +256,13 @@ public class ApplicationController extends TextWebSocketHandler implements Initi
             //stage.setFullScreen(true);
 
             SystemViewController svController = new SystemViewController(this,
-                    threadService,spellcheckConfigBean,asciiTreeGenerator);
+                    threadService,
+                    editorService,
+                    editorTabService,
+                    spellcheckConfigBean,
+                    editorConfigBean,
+                    shortcutProvider,
+                    asciiTreeGenerator);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SystemView.fxml"));
             loader.setController(svController);
             replaceSceneContent(loader);

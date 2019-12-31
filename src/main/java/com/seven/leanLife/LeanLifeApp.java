@@ -1,8 +1,11 @@
 package com.seven.leanLife;
 
 import com.seven.leanLife.config.ConfigurationService;
+import com.seven.leanLife.config.EditorConfigBean;
 import com.seven.leanLife.controller.ApplicationController;
+import com.seven.leanLife.controller.EditorController;
 import com.seven.leanLife.service.ThreadService;
+import com.seven.leanLife.service.ui.EditorService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -10,10 +13,8 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Configuration;
 
 
 /**
@@ -28,11 +29,14 @@ import org.springframework.context.annotation.Configuration;
 public class LeanLifeApp extends Application{
     private static Logger logger = LoggerFactory.getLogger(LeanLifeApp.class);
     private static ApplicationController controller;
+    private static EditorController editorController;
     private static ConfigurableApplicationContext context;
     private Stage stage;
 
     private ConfigurationService configurationService;
     private ThreadService threadService;
+    private EditorService editorService;
+    private EditorConfigBean editorConfigBean;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -69,12 +73,14 @@ public class LeanLifeApp extends Application{
         System.out.println("start Service");
 
         controller = context.getBean(ApplicationController.class);
+        editorController = context.getBean(EditorController.class);
+        editorConfigBean = context.getBean(EditorConfigBean.class);
         threadService = context.getBean(ThreadService.class);
+        editorService = context.getBean(EditorService.class);
+
 
         // 加载配置服务
         configurationService = context.getBean(ConfigurationService.class);
-        configurationService.loadConfigurations();
-
 
         final FXMLLoader parentLoader = new FXMLLoader();
         parentLoader.setControllerFactory(context::getBean);
@@ -86,6 +92,7 @@ public class LeanLifeApp extends Application{
 
         stage.setOnShowing(e -> {
             configurationService.loadConfigurations();
+            //// controller.applyInitialConfigurations();
         });
         stage.setOnShown(e -> {
             controller.bindConfigurations();
@@ -100,17 +107,22 @@ public class LeanLifeApp extends Application{
         final ThreadService threadService = context.getBean(ThreadService.class);
         threadService.start(() -> {
             try {
-                logger.info("thread Service start");
+                registerStartupListener();
             } catch (Exception e) {
                 logger.error("Problem occured in startup listener", e);
             }
         });
+
         /*
         scene.getWindow().setOnCloseRequest(controller::closeAllTabs);
         stage.widthProperty().addListener(controller::stageWidthChanged);
         stage.heightProperty().addListener(controller::stageWidthChanged);
         */
 
+    }
+    private void registerStartupListener() {
+        logger.info("thread Service start");
+        final ThreadService threadService = context.getBean(ThreadService.class);
     }
 
     /*

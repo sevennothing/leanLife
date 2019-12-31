@@ -8,9 +8,7 @@ import javafx.scene.control.Tooltip;
 
 
 /**
-
- * Created by usta on 24.01.2015.
-
+ *  提供菜单项的构建
  */
 
 public class MenuItemBuilt {

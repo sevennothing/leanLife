@@ -1,28 +1,13 @@
 package com.seven.leanLife;
 
-import com.seven.leanLife.config.ConfigurationService;
-import com.seven.leanLife.config.SpellcheckConfigBean;
 import com.seven.leanLife.controller.ApplicationController;
-import com.seven.leanLife.service.ThreadService;
-import com.seven.leanLife.service.extension.AsciiTreeGenerator;
+import com.seven.leanLife.controller.EditorController;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration;
-import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
-import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
-import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.*;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
-import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.socket.config.annotation.DelegatingWebSocketConfiguration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -33,8 +18,9 @@ import java.util.Base64;
 @Configuration
 @EnableWebSocket
 // 组件扫描启动太慢
-//@ComponentScan(basePackages = "com.seven.leanLife.**")
-@EnableAutoConfiguration
+@ComponentScan(basePackages = "com.seven.leanLife.**")
+//@EnableAutoConfiguration
+/*
 @Import({
         //DelegatingWebSocketConfiguration.class,
         DispatcherServletAutoConfiguration.class,
@@ -54,37 +40,22 @@ import java.util.Base64;
 
         ApplicationController.class,
         ConfigurationService.class,
+        ShortcutProvider.class,
+        EditorService.class,
+        //EditorConfigBean.class,
 })
+*/
 public class SpringAppConfig extends SpringBootServletInitializer implements WebSocketConfigurer {
     @Autowired
     private ApplicationController applicationController;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry){
+        //System.out.println("registerWebSocketHandlers");
         //TODO: 这里注册websocket
-        registry.addHandler(applicationController, "/ws", "/ws**", "/ws/**").withSockJS();
+        registry.addHandler(applicationController.editorController, "/ws", "/ws**", "/ws/**").withSockJS();
     }
 
-
-    @Bean
-    @Lazy
-    public SpellcheckConfigBean spellcheckConfigBean(ApplicationController controller, ThreadService threadService){
-        SpellcheckConfigBean spellcheckConfigBean = new SpellcheckConfigBean(controller, threadService);
-        return spellcheckConfigBean;
-    }
-
-    @Bean
-    @Lazy
-    public ThreadService threadService(){
-        ThreadService threadService = new ThreadService();
-        return threadService;
-    }
-    @Bean
-    @Lazy
-    public AsciiTreeGenerator asciiTreeGenerator(){
-        AsciiTreeGenerator asciiTreeGenerator = new AsciiTreeGenerator();
-        return asciiTreeGenerator;
-    }
 
     @Bean
     @Lazy
