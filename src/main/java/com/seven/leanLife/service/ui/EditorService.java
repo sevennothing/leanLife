@@ -1,6 +1,7 @@
 package com.seven.leanLife.service.ui;
 
 import com.seven.leanLife.component.BasicTab;
+import com.seven.leanLife.component.ToolBar;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -39,7 +40,7 @@ public class EditorService {
         this.controller = controller;
     }
 
-    public Node createEditorVBox(EditorPane editorPane, BasicTab tab) {
+    public FlowPane createEditorMenu(EditorPane editorPane){
         FlowPane flowPane = new FlowPane();
         String iconSize = "14.0";
         double minSize = 14.01;
@@ -179,12 +180,25 @@ public class EditorService {
         });
         flowPane.setMinWidth(0); // fix
         flowPane.getStyleClass().add("top-menu");
+        return flowPane;
+    }
+
+    public Node createEditorVBox(EditorPane editorPane, BasicTab tab) {
+        FlowPane flowPane = createEditorMenu(editorPane);
         final ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(editorPane);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
-        return new VBox(flowPane, scrollPane);
+
+        //tab.setPrivateMenu(flowPane);
+        /** 设置私有菜单 */
+        ToolBar toolBar = new ToolBar();
+        toolBar.addFlowPane(flowPane,"editor-toolbar");
+        tab.setToolBar(toolBar);
+
+        return new VBox(scrollPane);
+        //return new VBox(flowPane, scrollPane);
     }
     private List<Node> createMoreMenuButtons(final String iconSize, final double minSize) {
         MenuButton admonitionButton = new MenuButton("Admonitions");

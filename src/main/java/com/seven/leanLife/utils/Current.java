@@ -27,6 +27,7 @@ public class Current {
     private final EditorTabService editorTabService;
     private Map<String, Integer> cache;
     private Path currentEpubPath;
+    private BasicTab choiceTab;
 
     @Autowired
     public Current(final ApplicationController controller,
@@ -110,6 +111,13 @@ public class Current {
         String tabText = getCurrentTabText().replace("*", "").trim();
         tabText = tabText.contains(".") ? tabText.split("\\.")[0] : tabText;
         return tabText;
+    }
+    public void setChoiceTab(BasicTab tab){
+        this.choiceTab = tab;
+    }
+
+    public BasicTab getChoiceTab(){
+        return this.choiceTab;
     }
 }
 

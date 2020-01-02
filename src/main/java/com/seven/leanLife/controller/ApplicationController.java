@@ -20,6 +20,7 @@ import com.seven.leanLife.service.shortcut.ShortcutProvider;
 import com.seven.leanLife.service.ui.EditorService;
 import com.seven.leanLife.service.ui.EditorTabService;
 import com.seven.leanLife.utils.ConverterResult;
+import com.seven.leanLife.utils.Current;
 import com.seven.leanLife.utils.DocumentMode;
 
 import com.seven.leanLife.utils.Tuple;
@@ -88,6 +89,9 @@ public class ApplicationController {
     //标识当前用户
     private User user;
     public Properties dbConf;
+
+    @Autowired
+    private Current current;
 
     @Autowired
     public EditorController editorController;
@@ -256,6 +260,7 @@ public class ApplicationController {
             //stage.setFullScreen(true);
 
             SystemViewController svController = new SystemViewController(this,
+                    current,
                     threadService,
                     editorService,
                     editorTabService,

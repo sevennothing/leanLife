@@ -5,10 +5,8 @@
  */
 package com.seven.leanLife.controller;
 
-import com.seven.leanLife.component.BasicTab;
-import com.seven.leanLife.component.MonitorWin;
+import com.seven.leanLife.component.*;
 import com.seven.leanLife.component.ToolBar;
-import com.seven.leanLife.component.ToolBarItem;
 import com.seven.leanLife.config.ConfigurationService;
 import com.seven.leanLife.config.EditorConfigBean;
 import com.seven.leanLife.config.SpellcheckConfigBean;
@@ -18,21 +16,28 @@ import com.seven.leanLife.service.extension.AsciiTreeGenerator;
 import com.seven.leanLife.service.shortcut.ShortcutProvider;
 import com.seven.leanLife.service.ui.EditorService;
 import com.seven.leanLife.service.ui.EditorTabService;
+import com.seven.leanLife.utils.Current;
 import com.seven.leanLife.utils.EventProcess;
 
 import java.io.IOException;
 import java.net.URL;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
 import javafx.stage.Stage;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -81,10 +86,15 @@ public class SystemViewController {
     private ImageView recorderToolImg;
     @FXML
     private ImageView editorToolImg;
-    @FXML
-    private Tab clockTab;
-    @FXML
-    private TimeToolViewController timeToolController;
+
+    /** 时间戳工具只能同时存在一个被打开的视图 */
+    TimeToolViewController timeToolViewController;
+    BasicTab timeToolTab;
+
+    /** 录音机工具只能同时存在一个被打开的视图 */
+    RecorderViewController recorderViewController;
+    BasicTab recorderTab;
+
     @FXML
     private RecorderViewController recorderController;
     private Boolean hideMainMenu;
@@ -105,9 +115,13 @@ public class SystemViewController {
     @Autowired
     private ShortcutProvider shortcutProvider;
 
+    @Autowired
+    private Current current;
+
 
     @Autowired
     public SystemViewController(ApplicationController controller,
+                                Current current,
                                 ThreadService threadService,
                                 EditorService editorService,
                                 EditorTabService editorTabService,
@@ -124,6 +138,7 @@ public class SystemViewController {
         this.asciiTreeGenerator = asciiTreeGenerator;
         this.editorConfigBean = editorConfigBean;
         this.shortcutProvider = shortcutProvider;
+        this.current = current;
 
         //Stage stage = parentController.getStage();
         //stage.setMaximized(true);
@@ -140,8 +155,18 @@ public class SystemViewController {
         noteTabPane.visibleProperty().set(false);
         diaryTabPane.visibleProperty().set(false);
         toolsTabPane.visibleProperty().set(false);
+        toolsTabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+                if( newValue instanceof BasicTab) {
+                    current.setChoiceTab((BasicTab) newValue);
+                }else{
+                    current.setChoiceTab(null);
+                }
+                paintToolbar();
+            }
+        });
         handleNoteManLabelClickedAction();
-
     }
 
     @FXML private MenuItem hideMainMenuItem;
@@ -178,7 +203,7 @@ public class SystemViewController {
     @FXML
     private void handleNoteManLabelClickedAction(){
         process_pre_menu_view(noteManLabel, noteTabPane);
-        paintDefaultToolbar();
+        paintToolbar();
     }
 
     /**
@@ -187,7 +212,7 @@ public class SystemViewController {
     @FXML
     private void handleDiaryManLabelClickedAction(){
         process_pre_menu_view(diaryManLabel, diaryTabPane);
-        paintDefaultToolbar();
+        paintToolbar();
     }
 
 
@@ -245,10 +270,32 @@ public class SystemViewController {
     @FXML
     /* 时间戳工具功能 */
     private void handleClockToolClickedAction(){
-        timeToolController.setApplicationController(parentController);
-        SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
-        selectionModel.select(clockTab);
-        paintTimetoolToolbar();
+        if(timeToolViewController == null) {
+            timeToolViewController = new TimeToolViewController(parentController);
+        }
+
+        if(timeToolTab == null) {
+            timeToolTab = openNewTabPane(toolsTabPane, "/fxml/timeToolView.fxml", timeToolViewController, "时间工具");
+            timeToolTab.setOnClosed(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    timeToolTab = null;
+                }
+            });
+
+            ToolBar toolbar = new ToolBar();
+            double minSize = 14.01;
+            final Label flushLabel = LabelBuilt.icon(FontAwesome.REFRESH, minSize)
+                    .clazz("timeTools-label")
+                    .tip("fresh").click(timeToolViewController::refresh).build();
+            toolbar.addItem(flushLabel, "timeTools-label");
+            timeToolTab.setToolBar(toolbar);
+        }else {
+            SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
+            selectionModel.select(timeToolTab);
+        }
+        current.setChoiceTab(timeToolTab);
+        paintToolbar();
     }
 
     /***
@@ -256,10 +303,22 @@ public class SystemViewController {
      */
     @FXML
     private void handleRecorderToolClickedAction(){
-        parentController.sysMw.publishMsg("Start the Recorder tool");
-        RecorderViewController controller = new RecorderViewController(parentController);
-        openNewTabPane(toolsTabPane, "/fxml/RecorderView.fxml",controller,"录音机");
-        controller.voiceRecorderStart();
+        if(recorderViewController == null) {
+            recorderViewController = new RecorderViewController(parentController);
+        }
+        if(recorderTab == null) {
+            recorderTab = openNewTabPane(toolsTabPane, "/fxml/RecorderView.fxml",recorderViewController,"录音机");
+            recorderTab.setOnClosed(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    recorderTab = null;
+                }
+            });
+        }else {
+            SingleSelectionModel selectionModel = toolsTabPane.getSelectionModel();
+            selectionModel.select(recorderTab);
+        }
+        recorderViewController.voiceRecorderStart();
     }
 
     /**
@@ -268,22 +327,12 @@ public class SystemViewController {
     @FXML
     private void handleEditorToolClickedAction(){
         parentController.sysMw.publishMsg("Start the Editor tool");
-        /*
-        EditorController controller = new EditorController(parentController,
-                threadService,
-                editorTabService,
-                editorConfigBean,
-                shortcutProvider,
-                asciiTreeGenerator,
-                spellcheckConfigBean);
-
-        */
         BasicTab tab = openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",parentController.editorController,"编辑器");
-
         // 在新建的tab上加载编辑器
         parentController.editorController.loadEditPane(tab);
+        current.setChoiceTab(tab);
+        paintToolbar();
     }
-
 
     private void process_pre_menu_view(Label menuLabel, TabPane menuTab){
         currentMenuLabel.setStyle("-fx-background-color:cornsilk ;");
@@ -338,64 +387,32 @@ public class SystemViewController {
         stage.setFullScreen(true);
     }
 
-
     /**
      * 工具栏
      * tool-bar handle
      */
     @FXML
     private AnchorPane toolbarPane;
-    private void paintDefaultToolbar(){
+    private void paintToolbar(){
+        Stage stage = parentController.getStage();
+        double toolBarWidth = stage.getWidth() - 100;
+        double toolBarHeight = 40.0;
+
         toolbarPane.getChildren().clear();
+        toolbarPane.setPrefSize(toolBarWidth,toolBarHeight);
 
-        com.seven.leanLife.component.ToolBar toolbar = new com.seven.leanLife.component.ToolBar();
-
-        ToolBarItem saveI = new ToolBarItem();
-
-        String value = parentController.languageConf.getFeild("save");
-        saveI.setText(value);
-
-        URL url = getClass().getClassLoader().getResource("img/tools/save.png");
-        saveI.setImage(new Image(url.toExternalForm()));
-
-        saveI.setOnAction((ActionEvent e)->{
-            System.out.println("clicked");
-            handleSaveAction();
-        });
-        saveI.bindProcess(new EventProcess(){
-            @Override
-            public int process(){
-                handleSaveAction();
-                return 0;
+        //TODO: 获取当前的tab
+        if(current.getChoiceTab() != null) {
+            ToolBar toolBar = current.getChoiceTab().getToolBar();
+            if(toolBar != null){
+                toolBar.setPrefSize(toolBarWidth,toolBarHeight);
+                toolbarPane.getChildren().add(toolBar);
+                AnchorPane.setLeftAnchor(toolBar, Double.valueOf(0));
+                AnchorPane.setRightAnchor(toolBar, Double.valueOf(0));
+                AnchorPane.setBottomAnchor(toolBar,Double.valueOf(0));
+                AnchorPane.setTopAnchor(toolBar,Double.valueOf(0));
             }
-        });
-
-        toolbar.addItem(saveI);
-
-        ToolBarItem cancelI = new ToolBarItem();
-        url = getClass().getClassLoader().getResource("img/tools/cancel.png");
-        cancelI.setImage(new Image(url.toExternalForm()));
-        value = parentController.languageConf.getFeild("cancel");
-        cancelI.setText(value);
-        toolbar.addItem(cancelI);
-
-        toolbarPane.getChildren().addAll(toolbar);
-    }
-
-    private void paintTimetoolToolbar(){
-        String value;
-        toolbarPane.getChildren().clear();
-        com.seven.leanLife.component.ToolBar toolbar = new ToolBar();
-        ToolBarItem flushI = new ToolBarItem();
-        value = parentController.languageConf.getFeild("flush");
-        flushI.setText(value);
-        ToolBarItem consoleWinI = new ToolBarItem();
-        value = parentController.languageConf.getFeild("monitor.terminal");
-        consoleWinI.setText(value);
-        toolbar.addItem(flushI);
-        toolbar.addItem(consoleWinI);
-
-        toolbarPane.getChildren().add(toolbar);
+        }
     }
 
     @FXML

@@ -84,34 +84,7 @@ public class EditorTabService {
         this.shortcutProvider = shortcutProvider;
     }
 
-    private void attachEditorPane(BasicTab tab, Runnable... runnables){
-        AnchorPane anchorPane = new AnchorPane();
-        SplitPane splitPane = new SplitPane();
-
-        editorPane = new EditorPane(controller.editorController,this,
-                editorConfigBean,
-                threadService,
-                shortcutProvider,
-                applicationContext,asciiTreeGenerator,spellcheckConfigBean);
-
-        // 加载编辑页面
-        Node editorVBox = editorService.createEditorVBox(editorPane, tab);
-
-        // editorVBox 加入splitPane
-        splitPane.getItems().add(editorVBox);
-        anchorPane.getChildren().add(splitPane);
-        AnchorPane.setBottomAnchor(splitPane, 0D);
-        AnchorPane.setTopAnchor(splitPane, 0D);
-        AnchorPane.setLeftAnchor(splitPane, 0D);
-        AnchorPane.setRightAnchor(splitPane, 0D);
-
-
-        tab.setContent(anchorPane);
-        editorPane.getHandleReadyTasks().clear();
-        editorPane.getHandleReadyTasks().addAll(runnables);
-        editorPane.load(String.format(editorUrl, controller.editorController.getPort()));
-
-        // 创建preview 视图
+    private VBox createPreview(){
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         FlowPane flowPane = new FlowPane();
@@ -144,6 +117,37 @@ public class EditorTabService {
         AnchorPane previewPane = new AnchorPane();
         vbox.getChildren().addAll(hbox, previewPane);
 
+        return vbox;
+    }
+
+    private void attachEditorPane(BasicTab tab, Runnable... runnables){
+        AnchorPane anchorPane = new AnchorPane();
+        SplitPane splitPane = new SplitPane();
+
+        editorPane = new EditorPane(controller.editorController,this,
+                editorConfigBean,
+                threadService,
+                shortcutProvider,
+                applicationContext,asciiTreeGenerator,spellcheckConfigBean);
+
+        // 加载编辑页面
+        Node editorVBox = editorService.createEditorVBox(editorPane, tab);
+
+        // editorVBox 加入splitPane
+        splitPane.getItems().add(editorVBox);
+        anchorPane.getChildren().add(splitPane);
+        AnchorPane.setBottomAnchor(splitPane, 0D);
+        AnchorPane.setTopAnchor(splitPane, 0D);
+        AnchorPane.setLeftAnchor(splitPane, 0D);
+        AnchorPane.setRightAnchor(splitPane, 0D);
+
+        tab.setContent(anchorPane);
+        editorPane.getHandleReadyTasks().clear();
+        editorPane.getHandleReadyTasks().addAll(runnables);
+        editorPane.load(String.format(editorUrl, controller.editorController.getPort()));
+
+        // 创建preview 视图
+        VBox vbox = createPreview();
         splitPane.getItems().add(vbox);
 
         // 将tab加入editorTabs

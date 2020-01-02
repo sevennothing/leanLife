@@ -16,6 +16,7 @@ import com.seven.leanLife.service.extension.AsciiTreeGenerator;
 import com.seven.leanLife.service.shortcut.ShortcutProvider;
 import com.seven.leanLife.service.ui.EditorTabService;
 import com.seven.leanLife.utils.ConverterResult;
+import com.seven.leanLife.utils.Current;
 import com.seven.leanLife.utils.DocumentMode;
 import com.seven.leanLife.utils.Tuple;
 import javafx.application.HostServices;
@@ -71,6 +72,9 @@ public class EditorController extends TextWebSocketHandler implements Initializa
     private HostServices hostServices;
     private List<String> supportedModes;
     private ConverterResult lastConverterResult;
+
+    @Autowired
+    private Current current;
 
     @Autowired
     private ApplicationController parentController;
@@ -218,7 +222,6 @@ public class EditorController extends TextWebSocketHandler implements Initializa
         tmpPath += ts.toString();
         Path path = Paths.get(tmpPath);
         editorTabService.initEditorTab(tab,path);
-
     }
 
     @FXML

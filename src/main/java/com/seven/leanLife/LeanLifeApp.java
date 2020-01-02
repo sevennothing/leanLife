@@ -38,6 +38,7 @@ public class LeanLifeApp extends Application{
     private EditorService editorService;
     private EditorConfigBean editorConfigBean;
 
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> logger.error(e.getMessage(), e));

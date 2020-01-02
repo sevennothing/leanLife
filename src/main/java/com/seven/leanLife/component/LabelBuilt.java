@@ -22,6 +22,7 @@ public class LabelBuilt {
         iconLabel.setMinWidth(minSize);
         return new LabelBuilt(iconLabel);
     }
+
     public LabelBuilt tip(String text) {
         Tooltip tooltip = new Tooltip(text);
         Tooltip.install(label, tooltip);

@@ -15,6 +15,7 @@ import com.seven.leanLife.utils.MoreUtils;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -202,4 +203,7 @@ public class TimeToolViewController {
         }
     }
 
+    public void refresh(Event ... events){
+        System.out.println("refresh time-tool");
+    }
 }

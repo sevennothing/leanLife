@@ -4,6 +4,7 @@ import com.seven.leanLife.controller.ApplicationController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -28,6 +29,12 @@ public class BasicTab  extends Tab{
     private final Logger logger = LoggerFactory.getLogger(BasicTab.class);
     private final ApplicationController controller;
     private ContextMenu contextMenu;
+
+    /** 功能Tab的菜单栏 */
+    private ToolBar toolBar = null;
+
+    /** 用来保存tab的特定菜单 */
+    //private FlowPane privateMenu;
 
     // 对于编辑器窗口存在一个文件路径，非编辑器不需要使用path
     private Path path;
@@ -118,7 +125,6 @@ public class BasicTab  extends Tab{
         this.contextMenuProperty().setValue(contextMenu);
     }
 
-
     public MenuItem addMenu(String name, EventHandler<ActionEvent> value){
         MenuItem menuItem = new MenuItem(name);
         menuItem.setOnAction(value);
@@ -133,5 +139,19 @@ public class BasicTab  extends Tab{
     public void setPath(Path path){
         this.path = path;
     }
+    /*
+    public void setPrivateMenu(FlowPane flowPane){
+        this.privateMenu = flowPane;
+    }
+    public FlowPane getPrivateMenu(){
+        return this.privateMenu;
+    }
+    */
 
+    public void setToolBar(ToolBar toolBar) {
+        this.toolBar = toolBar;
+    }
+    public ToolBar getToolBar(){
+        return this.toolBar;
+    }
 }
