@@ -73,6 +73,7 @@ import static java.util.Objects.nonNull;
 @Component
 public class ApplicationController {
     private Logger logger = LoggerFactory.getLogger(ApplicationController.class);
+    private Path tempPath;
     private Path configPath;
     private Path installationPath;
     private String logPath;
@@ -166,6 +167,13 @@ public class ApplicationController {
             configPath = getInstallationPath().resolve("conf");
         }
         return configPath;
+    }
+
+    public Path getTempPath(){
+        if (isNull(tempPath)) {
+            tempPath = getInstallationPath().resolve("temp");
+        }
+        return tempPath;
     }
 
     public String getLogPath() {
@@ -289,6 +297,9 @@ public class ApplicationController {
         scene = new Scene(ap);
         stage.setScene(scene);
         stage.setResizable(true);
+        scene.getStylesheets().add(
+                getClass().getResource("/css/systemview.css")
+                .toExternalForm());
     }
 
     /**

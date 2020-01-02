@@ -30,12 +30,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.springframework.stereotype.Controller;
@@ -75,6 +78,8 @@ public class SystemViewController {
 
     /* 便捷工具 */
     @FXML
+    private FlowPane toolsMainTabFlowPane;
+    @FXML
     private Label toolsManLabel;
     @FXML
     private TabPane toolsTabPane;
@@ -86,6 +91,8 @@ public class SystemViewController {
     private ImageView recorderToolImg;
     @FXML
     private ImageView editorToolImg;
+    @FXML
+    private ImageView pictureToolImg;
 
     /** 时间戳工具只能同时存在一个被打开的视图 */
     TimeToolViewController timeToolViewController;
@@ -228,15 +235,49 @@ public class SystemViewController {
         }
     }
 
+    private void freshToolsMainTab(){
+        double minSize = 40.01;
+
+        final ImageView colorPicker = ImageViewBuilt.image(
+                getClass().getClassLoader().getResource("img/tools/paint_palette.png"),
+                minSize
+        ).clazz("tools-cell").tip("取色器").click(this::handleColorToolClickedAction).build();
+
+        final ImageView clockTool = ImageViewBuilt.image(
+                getClass().getClassLoader().getResource("img/tools/clock.png"),
+                minSize
+        ).clazz("tools-cell").tip("时间工具").click(this::handleClockToolClickedAction).build();
+
+        final ImageView recorderTool = ImageViewBuilt.image(
+                getClass().getClassLoader().getResource("img/tools/recorder.png"),
+                minSize
+        ).clazz("tools-cell").tip("录音机").click(this::handleRecorderToolClickedAction).build();
+
+        final ImageView editorTool = ImageViewBuilt.image(
+                getClass().getClassLoader().getResource("img/tools/editor.png"),
+                minSize
+        ).clazz("tools-cell").tip("编辑器").click(this::handleEditorToolClickedAction).build();
+
+
+        final ImageView pictureMan = ImageViewBuilt.image(
+                getClass().getClassLoader().getResource("img/tools/pictures.png"),
+                minSize
+        ).clazz("tools-cell").tip("图库管理工具").click(this::handlePictureToolClickedAction).build();
+
+        toolsMainTabFlowPane.getChildren().clear();
+        toolsMainTabFlowPane.getChildren().addAll(colorPicker,clockTool,recorderTool,editorTool,pictureMan);
+        toolsMainTabFlowPane.setHgap(Double.valueOf(30));
+        toolsMainTabFlowPane.setVgap(Double.valueOf(30));
+        toolsMainTabFlowPane.setId("tools-list");
+
+    }
+
     /**
      * 响应点击工具管理
      */
     @FXML
     private void handleToolsManLabelClickedAction(){
-        setImageForImageView(colorToolImg, "img/tools/paint_palette.png");
-        setImageForImageView(clockToolImg, "img/tools/clock.png");
-        setImageForImageView(recorderToolImg, "img/tools/recorder.png");
-        setImageForImageView(editorToolImg, "img/tools/editor.png");
+        freshToolsMainTab();
         process_pre_menu_view(toolsManLabel,toolsTabPane);
     }
 
@@ -261,15 +302,14 @@ public class SystemViewController {
 
     @FXML
     /* 取色器功能 */
-    private void handleColorToolClickedAction(){
-        parentController.sysMw.publishMsg("Start the color tool");
+    private void handleColorToolClickedAction(Event... events){
         ColorPickerViewController cpvController = new ColorPickerViewController(parentController);
         openNewTabPane(toolsTabPane, "/fxml/ColorPickerView.fxml",cpvController,"取色工具");
     }
 
     @FXML
     /* 时间戳工具功能 */
-    private void handleClockToolClickedAction(){
+    private void handleClockToolClickedAction(Event... events){
         if(timeToolViewController == null) {
             timeToolViewController = new TimeToolViewController(parentController);
         }
@@ -298,11 +338,12 @@ public class SystemViewController {
         paintToolbar();
     }
 
+
     /***
      *  录音机功能入口
      */
     @FXML
-    private void handleRecorderToolClickedAction(){
+    private void handleRecorderToolClickedAction(Event... events){
         if(recorderViewController == null) {
             recorderViewController = new RecorderViewController(parentController);
         }
@@ -325,10 +366,21 @@ public class SystemViewController {
      * 编辑器工具
      */
     @FXML
-    private void handleEditorToolClickedAction(){
+    private void handleEditorToolClickedAction(Event... events){
         parentController.sysMw.publishMsg("Start the Editor tool");
         BasicTab tab = openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",parentController.editorController,"编辑器");
         // 在新建的tab上加载编辑器
+        parentController.editorController.loadEditPane(tab);
+        current.setChoiceTab(tab);
+        paintToolbar();
+    }
+    /**
+     * 图形库管理工具
+     */
+    @FXML
+    private void handlePictureToolClickedAction(Event... events){
+        BasicTab tab = openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",parentController.editorController,"图库管理");
+        // 在新建的tab上加载
         parentController.editorController.loadEditPane(tab);
         current.setChoiceTab(tab);
         paintToolbar();
@@ -348,9 +400,6 @@ public class SystemViewController {
         currentMenuLabel = menuLabel;
     }
 
-    private void handleSaveAction(){
-        System.out.println("保存响应");
-    }
     /**
      *	退出登录
      */

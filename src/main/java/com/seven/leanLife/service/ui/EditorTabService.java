@@ -181,6 +181,7 @@ public class EditorTabService {
         }
 
         dsttab.setTabText(path.getFileName().toString());
+        dsttab.setPath(path);
         attachEditorPane(dsttab, runnables);
     }
 

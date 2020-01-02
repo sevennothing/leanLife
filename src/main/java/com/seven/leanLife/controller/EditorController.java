@@ -216,11 +216,12 @@ public class EditorController extends TextWebSocketHandler implements Initializa
     }
 
     public void loadEditPane(BasicTab tab){
-        String tmpPath = parentController.getConfigPath() + "/";
+        String tmpPath = parentController.getTempPath() + "/";
         Date date = new Date();
         Long ts = date.getTime();
         tmpPath += ts.toString();
         Path path = Paths.get(tmpPath);
+        System.out.println("Editor:"+  tmpPath);
         editorTabService.initEditorTab(tab,path);
     }
 

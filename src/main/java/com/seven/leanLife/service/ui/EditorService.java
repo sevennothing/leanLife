@@ -191,7 +191,6 @@ public class EditorService {
         scrollPane.setFitToWidth(true);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        //tab.setPrivateMenu(flowPane);
         /** 设置私有菜单 */
         ToolBar toolBar = new ToolBar();
         toolBar.addFlowPane(flowPane,"editor-toolbar");
