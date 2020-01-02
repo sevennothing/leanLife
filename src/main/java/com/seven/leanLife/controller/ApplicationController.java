@@ -74,6 +74,7 @@ import static java.util.Objects.nonNull;
 public class ApplicationController {
     private Logger logger = LoggerFactory.getLogger(ApplicationController.class);
     private Path tempPath;
+    private Path picturesPath;
     private Path configPath;
     private Path installationPath;
     private String logPath;
@@ -174,6 +175,12 @@ public class ApplicationController {
             tempPath = getInstallationPath().resolve("temp");
         }
         return tempPath;
+    }
+    public Path getPicturesPath(){
+        if (isNull(picturesPath)) {
+            picturesPath = getInstallationPath().resolve("Pictures");
+        }
+        return picturesPath;
     }
 
     public String getLogPath() {

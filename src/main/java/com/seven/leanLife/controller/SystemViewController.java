@@ -102,6 +102,8 @@ public class SystemViewController {
     RecorderViewController recorderViewController;
     BasicTab recorderTab;
 
+    PicturesViewController picturesViewController;
+
     @FXML
     private RecorderViewController recorderController;
     private Boolean hideMainMenu;
@@ -379,9 +381,13 @@ public class SystemViewController {
      */
     @FXML
     private void handlePictureToolClickedAction(Event... events){
-        BasicTab tab = openNewTabPane(toolsTabPane, "/fxml/EditorView.fxml",parentController.editorController,"图库管理");
-        // 在新建的tab上加载
-        parentController.editorController.loadEditPane(tab);
+        if(picturesViewController == null) {
+            picturesViewController = new PicturesViewController(parentController);
+        }
+        BasicTab tab = openNewTabPane(toolsTabPane, "/fxml/PicturesView.fxml",picturesViewController,"图库管理");
+        picturesViewController.setBasicTab(tab);
+        picturesViewController.initialized();
+
         current.setChoiceTab(tab);
         paintToolbar();
     }

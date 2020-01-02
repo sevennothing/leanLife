@@ -65,6 +65,14 @@
 }
 */
 
+.pre-picture, .next-picture{
+    -fx-pref-height: 30px;
+    -fx-font-size: 30px;
+    -fx-opacity: 0.1;
+}
+.pre-picture:hover, .next-picture:hover{
+    -fx-opacity: 0.6;
+}
 .toolbar {
     -fx-pref-height: 30px;
     -fx-font-size: 12px;
@@ -74,4 +82,10 @@
 #timeTools-label {
     -fx-pref-height: 30px;
     -fx-font-size: 24px;
+}
+
+.picture-toolbar {
+    -fx-pref-height: 30px;
+    -fx-font-size: 24px;
+    -fx-hgap: 30;
 }
