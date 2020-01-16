@@ -1,9 +1,8 @@
 package com.seven.leanLife.controller;
 
-import java.net.URL;
 import java.util.Map;
 
-import com.seven.leanLife.LeanLifeApp;
+import com.seven.leanLife.component.LabelBuilt;
 import com.seven.leanLife.engine.DataModel;
 import com.seven.leanLife.model.User;
 import com.seven.leanLife.utils.VerificationCodeTool;
@@ -14,10 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
-import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -35,7 +31,7 @@ public class RegistViewController {
 
 	//返回到登录界面
 	@FXML
-	private ImageView backToLoginView;
+	private Label backToLoginView;
 
 	//用户名错误提示信息
 	@FXML
@@ -205,8 +201,7 @@ public class RegistViewController {
 	@FXML
 	private void initialize() {
 		//设置返回图标
-		URL url = getClass().getClassLoader().getResource("img/guide/back.png");
-		backToLoginView.setImage(new Image(url.toString()));
+		LabelBuilt.resetIcon(backToLoginView, FontAwesome.CHEVRON_CIRCLE_LEFT,40.01).clazz("register-back-to-login-label");
 
 		//设置密保问题
 		secretQuestion.getItems().addAll(DataModel.getSecQues());

@@ -5,3 +5,7 @@
 .mainFxmlClass {
 
 }
+
+.register-back-to-login-label{
+    -fx-font-size:36px;
+}

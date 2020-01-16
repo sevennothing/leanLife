@@ -1,29 +1,19 @@
 package com.seven.leanLife.controller;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.component.MonitorWin;
-import com.seven.leanLife.component.WebkitCall;
 import com.seven.leanLife.config.*;
-import com.seven.leanLife.engine.AsciidocConverterProvider;
 import com.seven.leanLife.engine.AsciidocWebkitConverter;
-import com.seven.leanLife.helper.IOHelper;
 import com.seven.leanLife.model.User;
 import com.seven.leanLife.service.ThreadService;
 import com.seven.leanLife.service.extension.AsciiTreeGenerator;
 import com.seven.leanLife.service.shortcut.ShortcutProvider;
 import com.seven.leanLife.service.ui.EditorService;
 import com.seven.leanLife.service.ui.EditorTabService;
-import com.seven.leanLife.utils.ConverterResult;
 import com.seven.leanLife.utils.Current;
-import com.seven.leanLife.utils.DocumentMode;
 
-import com.seven.leanLife.utils.Tuple;
-import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -31,23 +21,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
-import javafx.event.Event;
 
-import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,17 +37,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.*;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
-
-import org.kordamp.ikonli.javafx.FontIcon;
 
 @Component
 public class ApplicationController {

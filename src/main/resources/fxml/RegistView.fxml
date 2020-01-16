@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,7 +12,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seven.leanLife.controller.RegistViewController">
+   <stylesheets>
+      <URL value="@/css/RegistView.css" />
+   </stylesheets>
    <center>
       <GridPane prefHeight="0.0" prefWidth="565.0" vgap="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -116,10 +119,10 @@
    <top>
       <HBox prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fx:id="backToLoginView" fitHeight="50.0" fitWidth="85.0" onMouseClicked="#HandleBackToLoginAction" pickOnBounds="true" preserveRatio="true">
+            <Label fx:id="backToLoginView" onMouseClicked="#HandleBackToLoginAction" pickOnBounds="true" >
                <HBox.margin>
                   <Insets left="12.0" />
-               </HBox.margin></ImageView>
+               </HBox.margin></Label>
             <Label alignment="CENTER" contentDisplay="CENTER" lineSpacing="10.0" prefHeight="50.0" prefWidth="400.0" text="注册" textAlignment="JUSTIFY">
                <font>
                   <Font name="Monaco" size="34.0" />
