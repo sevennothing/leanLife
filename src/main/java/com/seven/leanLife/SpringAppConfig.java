@@ -2,8 +2,12 @@ package com.seven.leanLife;
 
 import com.seven.leanLife.controller.ApplicationController;
 import com.seven.leanLife.controller.EditorController;
+import com.zaxxer.hikari.HikariDataSource;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.*;
@@ -12,7 +16,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import javax.annotation.Resource;
 import javax.script.ScriptEngine;
+import javax.sql.DataSource;
 import java.util.Base64;
 
 @Configuration
@@ -52,7 +58,7 @@ public class SpringAppConfig extends SpringBootServletInitializer implements Web
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry){
         //System.out.println("registerWebSocketHandlers");
-        //TODO: 这里注册websocket
+        // 这里注册websocket
         registry.addHandler(applicationController.editorController, "/ws", "/ws**", "/ws/**").withSockJS();
     }
 

@@ -35,6 +35,19 @@ allprojects {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-websocket")
+    compile("org.springframework:spring-jdbc:5.2.2.RELEASE")
+    compile("org.mybatis:mybatis:3.5.3")
+    compile("org.mybatis:mybatis-spring:2.0.3")
+    // 添加HikariCP 数据源
+    compile("com.zaxxer:HikariCP:3.4.1")
+
+    // Sqlite数据库
+    compile("org.xerial:sqlite-jdbc:3.30.1")
+
+    //@Data 注解
+    compile("org.projectlombok:lombok:1.18.8")
+    
+    compile("org.mybatis.generator:mybatis-generator-core:1.4.0")
     compile("commons-io:commons-io")
     compile("com.ibm.icu:icu4j-charset:65.1")
     compile("org.jooq:joox:1.6.0")
@@ -44,7 +57,6 @@ dependencies {
     compile("org.kordamp.ikonli:ikonli-javafx:11.3.4")
     compile("org.kordamp.ikonli:ikonli-fontawesome-pack:11.3.4")
     compile("org.glassfish:javax.json:1.1.4")
-
     compile("com.dooapp.fxform2:core:9.0.0")
 
     compile("org.openjfx:javafx-controls:13.0.1")
@@ -52,6 +64,7 @@ dependencies {
     compile("org.openjfx:javafx-web:13.0.1")
     compile("org.openjfx:javafx-fxml:13.0.1")
     compile("org.openjfx:javafx-swing:13.0.1")
+
 
     compile fileTree(dir: 'lib', includes: ['*.jar'])
 

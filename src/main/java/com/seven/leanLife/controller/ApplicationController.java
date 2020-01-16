@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seven.leanLife.LeanLifeApp;
 import com.seven.leanLife.component.MonitorWin;
 import com.seven.leanLife.component.WebkitCall;
-import com.seven.leanLife.config.EditorConfigBean;
-import com.seven.leanLife.config.LangConfigBean;
-import com.seven.leanLife.config.PreviewConfigBean;
-import com.seven.leanLife.config.SpellcheckConfigBean;
+import com.seven.leanLife.config.*;
 import com.seven.leanLife.engine.AsciidocConverterProvider;
 import com.seven.leanLife.engine.AsciidocWebkitConverter;
 import com.seven.leanLife.helper.IOHelper;
@@ -40,6 +37,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 
+import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +66,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
+
+import org.kordamp.ikonli.javafx.FontIcon;
 
 @Component
 public class ApplicationController {
@@ -120,6 +119,8 @@ public class ApplicationController {
     private EditorConfigBean editorConfigBean;
     @Autowired
     public AsciidocWebkitConverter asciidocWebkitConverter;
+    @Autowired
+    public DataBaseConfigBean dataBaseConfigBean;
 
 
     public void initializeApp(){

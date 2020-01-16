@@ -6,9 +6,12 @@
 package com.seven.leanLife.controller;
 
 import com.seven.leanLife.LeanLifeApp;
+import com.seven.leanLife.component.ImageViewBuilt;
+import com.seven.leanLife.component.LabelBuilt;
+import com.seven.leanLife.engine.DataException;
+import com.seven.leanLife.engine.DataModel;
 import com.seven.leanLife.model.User;
-import com.seven.leanLife.utils.CheckValidTool;
-import com.seven.leanLife.utils.JDBCTool;
+//import com.seven.leanLife.utils.JDBCTool;
 import com.seven.leanLife.utils.DialogTool;
 import com.seven.leanLife.config.DebugConfig;
 
@@ -22,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -64,11 +68,11 @@ public class LoginViewController{
     @FXML
     public void initialize() {
         //System.out.println("Login View initialize");
-        URL url = getClass().getClassLoader().getResource("img/guide/user.png");
-        userNameLabel.setGraphic(new ImageView(new Image(url.toExternalForm())));
-        url = getClass().getClassLoader().getResource("img/guide/password.png");
-        passwordLabel.setGraphic(new ImageView(new Image(url.toExternalForm())));
-        url = getClass().getClassLoader().getResource("img/leftimage.bmp");
+        double minSize = 20.01;
+        LabelBuilt.resetIcon(userNameLabel, FontAwesome.USER, minSize).clazz("login-username-label").tip("用户名");
+        LabelBuilt.resetIcon(passwordLabel, FontAwesome.UNLOCK_ALT, minSize).clazz("login-password-label").tip("密码");
+
+        URL url = getClass().getClassLoader().getResource("img/leftimage.bmp");
         leftImageView.setImage(new Image(url.toExternalForm()));
 
         leftImageView.setPreserveRatio(true);
@@ -110,21 +114,20 @@ public class LoginViewController{
         String userName = userNameField.getText();
         String password = passwordField.getText();
 
-        if(DebugConfig.IGNORE_LOGIN_AUTH){
+        if (DebugConfig.IGNORE_LOGIN_AUTH) {
             /* Debug Only*/
             parentController.showSystemView();
             return;
         }
-        if(CheckValidTool.isValidUserName(userName) && CheckValidTool.isValidPassword(password)) {
-            String sql = "select * from user where name=? and password=?";
-            User user= JDBCTool.getUser(parentController.dbConf, sql, userName, password);
-            if(user != null) {
+        try {
+            User user = parentController.dataBaseConfigBean.getMyDataBase().getUserWithAuthorize(userName, password);
+            if (user != null) {
                 //设置当前用户
                 parentController.setUser(user);
                 DialogTool.informationDialog("登录成功", "即将进入主界面");
                 //显示主界面
                 parentController.showSystemView();
-            }else {
+            } else {
                 errorInfoLabel.setText("用户名或密码不正确");
                 userNameField.clear();
                 passwordField.clear();
@@ -136,7 +139,8 @@ public class LoginViewController{
                 ft.setToValue(1);
                 ft.play();
             }
-        }else {
+        }catch (DataException e){
+            System.out.println(e.toString());
             errorInfoLabel.setText("用户名或密码不合法");
             userNameField.clear();
             passwordField.clear();
@@ -148,5 +152,4 @@ public class LoginViewController{
             ft.play();
         }
     }
-
 }

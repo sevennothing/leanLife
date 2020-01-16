@@ -1,12 +1,11 @@
 package com.seven.leanLife.controller;
 
+import java.net.URL;
 import java.util.Map;
 
 import com.seven.leanLife.LeanLifeApp;
+import com.seven.leanLife.engine.DataModel;
 import com.seven.leanLife.model.User;
-import com.seven.leanLife.utils.CheckValidTool;
-import com.seven.leanLife.utils.JDBCTool;
-import com.seven.leanLife.utils.SingleValueTool;
 import com.seven.leanLife.utils.VerificationCodeTool;
 import com.seven.leanLife.utils.DialogTool;
 
@@ -17,6 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -159,15 +160,16 @@ public class RegistViewController {
 
 		//若验证码正确 继续进行用户注册
 		if(isCorrectVerCodeAn) {
-			if(userName!=null && CheckValidTool.isValidUserName(userName)) {
-				if(password!=null && CheckValidTool.isValidPassword(password)) {
+			if(userName!=null && DataModel.isValidUserName(userName)) {
+				if(password!=null && DataModel.isValidPassword(password)) {
 					if(secretAnswer!=null) {
 						if(addUser(userName, password, index, secretAnswer)) {
 							//弹出注册成功的对话框 并让用户选择是否直接进入系统主页
 							boolean isGoToSystemView = DialogTool.confirmDialog("注册成功", "按确认登录主界面，取消返回登录界面");
 							if(isGoToSystemView) {
 								//设置当用户
-								User user = new User(userName, password, index, secretAnswer);
+								//User user = new User(userName, password, index, secretAnswer);
+								User user = null;
 								parentController.setUser(user);
 
 								parentController.showSystemView();
@@ -203,15 +205,11 @@ public class RegistViewController {
 	@FXML
 	private void initialize() {
 		//设置返回图标
-		backToLoginView.setImage(new Image("file:images/back.png"));
+		URL url = getClass().getClassLoader().getResource("img/guide/back.png");
+		backToLoginView.setImage(new Image(url.toString()));
+
 		//设置密保问题
-//		secretQuestion.getItems().add("你最喜欢的人是谁？");
-//		secretQuestion.setItems(FXCollections.observableArrayList(
-//				"你最喜欢的动漫角色是谁？",
-//				"你最喜欢的女明星是谁？",
-//				"对你启发最大的一本书是什么？"
-//				));
-		secretQuestion.getItems().addAll(SingleValueTool.getSecQues());
+		secretQuestion.getItems().addAll(DataModel.getSecQues());
 		secretQuestion.getSelectionModel().selectFirst();
 
 		//设置验证码	
@@ -251,11 +249,13 @@ public class RegistViewController {
 	 *	新添用户
 	 */
 	public boolean addUser(String name, String password, int secQueIndex, String answer) {
-		String sql = "insert into user(name, password, secretQuestion, secretAnswer) values(?,?,?,?)";
-		if(JDBCTool.executeInsertDeleteUpdate(parentController.dbConf, sql, name,password,secQueIndex,answer)) {
-			return true;
-		}else {
-			return false;
-		}
+
+		User user = new User();
+		user.setName(name);
+		user.setPassword(password);
+		user.setSecretquestionId(secQueIndex);
+		user.setSecretanswer(answer);
+		parentController.dataBaseConfigBean.getMyDataBase().addNewUser(user);
+		return true;
 	}
 }

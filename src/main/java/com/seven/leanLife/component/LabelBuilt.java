@@ -23,6 +23,20 @@ public class LabelBuilt {
         return new LabelBuilt(iconLabel);
     }
 
+    /**
+     * 对已有的label进行重新设定
+     * @param label
+     * @param ikon
+     * @param minSize
+     * @return
+     */
+    public static LabelBuilt resetIcon( Label label,Ikon ikon,double minSize) {
+        LabelBuilt lb = new LabelBuilt(label);
+        label.setGraphic(new FontIcon(ikon));
+        label.setMinWidth(minSize);
+        return lb;
+    }
+
     public LabelBuilt tip(String text) {
         Tooltip tooltip = new Tooltip(text);
         Tooltip.install(label, tooltip);

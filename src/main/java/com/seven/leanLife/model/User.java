@@ -1,55 +1,66 @@
 package com.seven.leanLife.model;
-/**   
-* @title: User.java 
-* @package application.model 
-* @description: (用户模型类) 
-* @author 夏靖雯  
-* @date 2018年12月31日 下午3:55:17 
-* @version V1.0   
-*/
 
-public class User {
-	private String userName;
-	private String password;
-	private int secQuesIndex;
-	private String secAnswer;
-	
-	public User(String userName, String password, int secQuesIndex, String secAnswer) {
-		this.userName = userName;
-		this.password = password;
-		this.secQuesIndex = secQuesIndex;
-		this.secAnswer = secAnswer;
-	}
-	
-	public String getUserName() {
-		return userName;
-	}
+import java.io.Serializable;
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+public class User implements Serializable {
+    private String name;
+    private String password;
+    private Integer secretquestionId;
+    private String secretanswer;
+    private String registerdate;
 
-	public String getPassword() {
-		return password;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getSecQuesIndex() {
-		return secQuesIndex;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setSecQuesIndex(int secQuesIndex) {
-		this.secQuesIndex = secQuesIndex;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getSecAnswer() {
-		return secAnswer;
-	}
+    public Integer getSecretquestionId() {
+        return secretquestionId;
+    }
 
-	public void setSecAnswer(String secAnswer) {
-		this.secAnswer = secAnswer;
-	}
+    public void setSecretquestionId(Integer secretquestionIndex) {
+        this.secretquestionId = secretquestionIndex;
+    }
+
+    public String getSecretanswer() {
+        return secretanswer;
+    }
+
+    public void setSecretanswer(String secretanswer) {
+        this.secretanswer = secretanswer;
+    }
+
+    public String getRegisterdate() {
+        return registerdate;
+    }
+
+    public void setRegisterdate(String registerdate) {
+        this.registerdate = registerdate;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", name=").append(name);
+        sb.append(", password=").append(password);
+        sb.append(", secretquestion=").append(secretquestionId.toString());
+        sb.append(", secretanswer=").append(secretanswer);
+        sb.append(", registerdate=").append(registerdate);
+        sb.append("]");
+        return sb.toString();
+    }
 }

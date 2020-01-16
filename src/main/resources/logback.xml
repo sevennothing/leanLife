@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-    <logger name="org.springframework" level="DEBUG"/>
+    <logger name="org.springframework" level="INFO"/>
     <logger name="org.apache" level="ERROR"/>
     <logger name="org.xnio" level="ERROR"/>
     <logger name="io.undertow" level="ERROR"/>

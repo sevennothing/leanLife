@@ -1,6 +1,7 @@
 package com.seven.leanLife;
 
 import com.seven.leanLife.config.ConfigurationService;
+import com.seven.leanLife.config.DataBaseConfigBean;
 import com.seven.leanLife.config.EditorConfigBean;
 import com.seven.leanLife.controller.ApplicationController;
 import com.seven.leanLife.controller.EditorController;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 
 
@@ -25,7 +27,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  */
 //@Configuration
 //@EnableAutoConfiguration
-@SpringBootApplication
+@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
 public class LeanLifeApp extends Application{
     private static Logger logger = LoggerFactory.getLogger(LeanLifeApp.class);
     private static ApplicationController controller;
@@ -37,6 +39,7 @@ public class LeanLifeApp extends Application{
     private ThreadService threadService;
     private EditorService editorService;
     private EditorConfigBean editorConfigBean;
+    private DataBaseConfigBean dataBaseConfigBean;
 
 
     @Override
@@ -78,6 +81,7 @@ public class LeanLifeApp extends Application{
         editorConfigBean = context.getBean(EditorConfigBean.class);
         threadService = context.getBean(ThreadService.class);
         editorService = context.getBean(EditorService.class);
+        dataBaseConfigBean = context.getBean(DataBaseConfigBean.class);
 
 
         // 加载配置服务

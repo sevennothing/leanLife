@@ -3,5 +3,8 @@
  */
 
 .mainFxmlClass {
+}
 
+.login-username-label, .login-password-label {
+    -fx-font-size:36px;
 }

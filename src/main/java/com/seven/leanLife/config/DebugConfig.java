@@ -10,5 +10,5 @@ package com.seven.leanLife.config;
  * @author Admin
  */
 public class DebugConfig {
-    public static final boolean IGNORE_LOGIN_AUTH = true;
+    public static final boolean IGNORE_LOGIN_AUTH = false;
 }
